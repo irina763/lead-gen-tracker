@@ -242,7 +242,7 @@
     </div>
     <p style="color:#a39d92;font-size:15px;line-height:1.55;margin:0 0 22px;max-width:62ch">From above: the building, the avenue, and the waterfront and parkland that frame it. Tap any image to enlarge.</p>
     <div id="pt-hood" class="pt-plates" style="display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(140px,15vw,200px);gap:14px;margin-bottom:40px"></div>
-    <div class="pt-loc-grid" style="display:grid;grid-template-columns:0.92fr 1.08fr;gap:clamp(24px,4vw,56px);align-items:start">
+    <div class="pt-loc-grid" id="pt-loc-grid" style="display:grid;grid-template-columns:0.92fr 1.08fr;gap:clamp(24px,4vw,56px);align-items:start">
       <div>
         <p style="font-size:16px;line-height:1.62;color:#d9d2c6;margin:0 0 16px">2600 Pennsylvania Avenue NW sits where West End meets Georgetown &mdash; the avenue running east toward the White House, Rock Creek and the Potomac a short walk west. It is one of the few DC addresses where a car is genuinely optional and a garage space still comes with the lease.</p>
         <p style="font-size:16px;line-height:1.62;color:#d9d2c6;margin:0">Georgetown's M Street shops and restaurants, the Georgetown Waterfront, the Kennedy Center, Trader Joe's and Whole Foods, GW Hospital and the university campus are all within an easy walk &mdash; and Foggy Bottom&ndash;GWU Metro puts three lines within reach.</p>
@@ -250,14 +250,11 @@
              confirm before launch; do not publish a distance you have not checked. -->
         <ul id="pt-loc-list" style="list-style:none;margin:26px 0 0;padding:24px 0 0;border-top:1px solid rgba(244,239,230,.10)"></ul>
       </div>
-      <div>
-        <!-- [P3] Proxi map: create a map for this address and paste its data-id here.
-             The Breezy Down id below is a PLACEHOLDER and points at Rockville. -->
-        <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(244,239,230,.12);background:#2a2624">
-          <proxi-map data-id="REPLACE_WITH_2600_PENN_MAP_ID" style="display:block;width:100%;height:520px"></proxi-map>
-        </div>
-        <p style="font:500 11px/1 'Raleway',sans-serif;letter-spacing:.04em;color:#6f6a62;text-align:center;margin:12px 0 0">Map powered by Proxi</p>
-      </div>
+      <!-- [P3] Proxi map. The <proxi-map> element is injected by the script
+           ONLY when PROXI_MAP_ID is set. Until then this column is removed and
+           the facts list goes full width — an unset id would otherwise render
+           an empty 520px box on a live page. -->
+      <div id="pt-map-col"></div>
     </div>
   </div>
 </section>
@@ -508,6 +505,11 @@
   var TOUR_URL  = '';
   var VIDEO_ID  = '';   /* YouTube id for the interior video tour */
   var AREA_VIDEO_ID = ''; /* YouTube id for the neighborhood video */
+
+  /* [P3] Proxi map id for this address. Empty = the map column is removed and
+     the location facts run full width, so the page is safe to publish before
+     the map exists. Paste the id and the map appears with no other change. */
+  var PROXI_MAP_ID = '';
 
   /* ============================================================
      2. PHOTOS
@@ -763,7 +765,9 @@
     set('pt-film', list.map(function(r, i){
       var a = i === ri;
       return '<button class="pt-room-btn" data-room="' + i + '" style="flex:0 0 auto;width:clamp(124px,14vw,172px);display:flex;flex-direction:column;gap:9px;padding:0;border:none;background:transparent;cursor:pointer;text-align:left;opacity:' + (a ? '1' : '.62') + '"' + (a ? ' aria-current="true"' : '') + '>'
-        + '<span style="display:block;width:100%;height:96px;border-radius:10px;overflow:hidden;border:2px solid ' + (a ? '#b89b6a' : 'rgba(244,239,230,.10)') + '"><img src="' + px(r.img) + '" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></span>'
+        /* the strip reuses each room's full-size lead image, so lazy-load it —
+           only ~7 tiles are on screen at once and the strip sits below the fold */
+        + '<span style="display:block;width:100%;height:96px;border-radius:10px;overflow:hidden;border:2px solid ' + (a ? '#b89b6a' : 'rgba(244,239,230,.10)') + '"><img src="' + px(r.img) + '" alt="" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block"></span>'
         + '<span style="font-family:\'DM Serif Display\',Georgia,serif;font-size:13.5px;line-height:1.15;color:' + (a ? '#cdb280' : '#a39d92') + '">' + esc(r.title) + '</span></button>';
     }).join(''));
   }
@@ -773,11 +777,29 @@
     var el = document.getElementById(elId); if (!el) return;
     el.innerHTML = setDef.map(function(g){
       return '<button class="pt-plate" data-gal="' + g.gal + '" data-idx="' + g.i + '" style="position:relative;overflow:hidden;border-radius:14px;border:none;padding:0;cursor:pointer;' + (g.big ? 'grid-column:span 2;grid-row:span 2;' : '') + '">'
-        + '<img src="' + ((GAL[g.gal] || [])[g.i] || {}).src + '" alt="' + esc(g.cap) + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">'
+        + '<img src="' + ((GAL[g.gal] || [])[g.i] || {}).src + '" alt="' + esc(g.cap) + '" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">'
         + '<span style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,13,13,.72),rgba(15,13,13,0) 52%)"></span>'
         + '<span style="position:absolute;left:18px;bottom:16px;z-index:2;color:#fff;font:600 11px/1 \'Raleway\',sans-serif;letter-spacing:.14em;text-transform:uppercase;text-align:left">' + esc(g.cap) + '</span></button>';
     }).join('');
   }
+
+  /* ---- Proxi map: render only when an id exists, otherwise drop the
+     column so the facts list takes the full width ---- */
+  (function renderMap(){
+    var col  = document.getElementById('pt-map-col');
+    var grid = document.getElementById('pt-loc-grid');
+    if (!col) return;
+    if (!PROXI_MAP_ID || PROXI_MAP_ID.indexOf('REPLACE') === 0){
+      col.parentNode.removeChild(col);
+      /* single column: cap the measure so the prose doesn't run 1340px wide */
+      if (grid){ grid.style.gridTemplateColumns = '1fr'; grid.style.maxWidth = '820px'; }
+      return;
+    }
+    col.innerHTML =
+        '<div style="border-radius:16px;overflow:hidden;border:1px solid rgba(244,239,230,.12);background:#2a2624">'
+      + '<proxi-map data-id="' + esc(PROXI_MAP_ID) + '" style="display:block;width:100%;height:520px"></proxi-map></div>'
+      + '<p style="font:500 11px/1 \'Raleway\',sans-serif;letter-spacing:.04em;color:#6f6a62;text-align:center;margin:12px 0 0">Map powered by Proxi</p>';
+  })();
 
   /* ---- fact lists ---- */
   function factList(elId, rows){

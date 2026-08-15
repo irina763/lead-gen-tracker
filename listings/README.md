@@ -51,11 +51,37 @@ Shot list the page is built around:
 - **Floor plan (1)**
 
 The hub block needs the hero photo URL in two places (`data-hero` and the thumb `src`).
+Those two are **not** placeholder-protected — they are plain `<img src>` in the hub markup,
+so don't paste the updated hub until you have at least the hero photo, or it shows a broken
+image in the index and the hero.
+
+### Export sizes
+
+One file serves both the grid tile and the lightbox, and the room lead images double as the
+filmstrip thumbnails, so size for the **largest** place each image appears:
+
+| Set | Export width | Target weight | Why |
+|---|---|---|---|
+| Hero + rotation (4) | 2400 px | ≤350 KB | Full-bleed, stretches to the display width. The first one is the LCP image — it is the only one worth obsessing over |
+| Room leads (9) | 1600 px | ≤180 KB | Fills the 16:9 featured panel; also reused at 172×96 in the filmstrip |
+| Room extras (9) | 1600 px | ≤180 KB | Lightbox only |
+| Views / building / neighborhood (16) | 1600 px | ≤180 KB | Grid tiles are 300–600 px, but the same file opens in the lightbox at 1100 px |
+| Floor plan (1) | 2000 px | ≤400 KB | Has to stay legible when zoomed — use a higher quality than the photos, line art and small type suffer from aggressive compression |
+
+WebP, quality ~72 (~80 for the floor plan), sRGB, EXIF stripped. That lands the whole set
+around 6–7 MB, of which only the hero and a handful of tiles load up front — the filmstrip
+and every grid tile are lazy-loaded.
+
+**Filenames matter**: lowercase, hyphens, no spaces or apostrophes. The script builds every
+URL as `folder + slug + '.webp'`, so if WordPress renames the upload the slug breaks. Upload
+first, then copy the real slug off the media library URL.
 
 ### Fill in
 - `TOUR_URL` — the **public** 3D tour link. Empty = the hero button and tour card hide/downgrade themselves, no dead link.
 - `VIDEO_ID`, `AREA_VIDEO_ID` — YouTube ids. Same downgrade behaviour.
-- Proxi map `data-id` — currently `REPLACE_WITH_2600_PENN_MAP_ID`.
+- `PROXI_MAP_ID` — empty for now. Empty means the map column is **removed** and the
+  location facts run full width, so the page is safe to publish before the map exists.
+  Paste the id and the map appears with no other change.
 - The listing page URL, if it isn't `/2600-pennsylvania-ave-nw-8a-washington-dc/` (used in the hub block and the hero fallback).
 
 ### Verify with the landlord / property manager
