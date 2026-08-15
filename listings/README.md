@@ -72,3 +72,31 @@ The hub block needs the hero photo URL in two places (`data-hero` and the thumb 
 - The DCPS boundary finder link, and whether you want the named in-boundary schools listed
   (see `[P5]` in the schools section).
 - `BUILDING_FACTS` — floors, elevator, intercom, garage.
+
+---
+
+## 7807 Breezy Down Terrace — square footage correction
+
+Per MLS / county assessor:
+
+| | sf |
+|---|---|
+| Above grade, finished | 1,060 |
+| Below grade, finished | 300 |
+| Below grade, unfinished | 200 |
+| **Total below grade** | **500** |
+| **Total finished** | **1,360** |
+| **Total** | **1,560** |
+
+The page previously said 1,560 in the hero and 1,580 in the specs grid. Both are now
+correct and the full breakdown is on the page, because portals headline "Total Fin SQFT"
+(1,360) while the page leads with total (1,560) — showing the split is what reconciles the
+two for a buyer who cross-references.
+
+Changed in:
+- `7807-breezy-down-terrace-rockville-md.html` — hero (now two stats: total and finished),
+  specs grid (five cells + a source footnote), grid widened to 6 columns so 18 cells fill
+  3 even rows
+- `featured-listings-hub.html` — the Breezy Down block's specs line
+
+Keep the specs grid a multiple of 6 cells when editing.
