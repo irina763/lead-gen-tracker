@@ -1,0 +1,886 @@
+<!-- ============================================================
+     LOOK INSIDE THE HOUSE — Active Listings Hub
+     Paste into a single Elementor HTML widget.
+     Fonts load globally via Perfmatters (no @import / link here).
+
+     ADD A LISTING = paste one <a class="invt-listing"> block into
+     the .invt-index list. Fill: href, data-hero, data-tour, the
+     four text lines, and (optional) data-featured to put it in the
+     hero rotation. The hero builds itself from these blocks.
+     ============================================================ -->
+<style>
+#invt{
+  /* ---- TOKENS ---- */
+  --ink:#1A1A1A; --ink-2:#2C2C2C; --wash:#EAEAEA; --wash-soft:#F5F2EC;
+  --dark:#221F1F; --band:#3A0E57;
+  --purple:#4A126E; --purple-bright:#9372A8; --lav:#B79BD0;
+  --purple-light:rgba(74,18,110,0.08); --purple-border:rgba(74,18,110,0.15);
+  --cream:#F4EFE6; --cream-2:#E7E1D8; --cream-dim:#C9C2B8; --lav-dim:#D8CCE4;
+  --muted:#8C857E; --muted-2:#6B6660; --body-c:#4A4540;
+  --r-lg:16px; --r-sm:12px;
+  --sh-card:0 26px 60px rgba(20,17,15,0.32);
+  --sh-soft:0 24px 60px rgba(34,31,31,0.22);
+  --maxw:1340px;
+  /* heading scale — editorial display tier (see notes; larger than the
+     1.8–2.5rem doc scale, reined in from the original 6rem hero) */
+  --fs-hero:clamp(2.3rem,5vw,3.9rem);
+  --fs-h2:clamp(1.85rem,3.6vw,2.7rem);
+  --fs-h3:1.4rem;
+  --fs-body:1.0625rem;
+}
+#invt, #invt *{ box-sizing:border-box; }
+#invt{
+  font-family:'Raleway',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;
+  color:var(--ink) !important;
+  background:#fff !important; background-color:#fff !important;
+  line-height:1.3 !important;
+}
+#invt h1,#invt h2,#invt h3,#invt p,#invt a,#invt span,#invt button,#invt li{
+  font-family:'Raleway',sans-serif !important;
+}
+#invt h1,#invt h2,#invt h3{
+  font-family:'DM Serif Display',Georgia,serif !important;
+  font-weight:400 !important; line-height:1.2 !important; margin:0;
+}
+#invt p{ font-size:var(--fs-body) !important; line-height:1.3 !important; margin:0; }
+#invt a{ text-decoration:none; color:inherit; }
+#invt img{ display:block; max-width:100%; }
+#invt .invt-wrap{ max-width:var(--maxw); margin:0 auto; }
+
+/* ---- visible keyboard focus (quality floor) ---- */
+#invt a:focus-visible,
+#invt button:focus-visible{ outline:2px solid var(--lav); outline-offset:3px; border-radius:4px; }
+
+/* ---- eyebrow / label ---- */
+#invt .invt-eyebrow{
+  display:block; margin:0 0 14px; font-size:11px !important; font-weight:700 !important;
+  letter-spacing:0.22em; text-transform:uppercase; color:var(--purple) !important; line-height:1.3 !important;
+}
+#invt .invt-eyebrow--dark{ color:var(--lav) !important; }
+
+/* ============ HERO ============ */
+#invt .invt-hero{
+  position:relative; min-height:90vh; overflow:hidden;
+  background:var(--dark) !important; background-color:var(--dark) !important;
+  color:var(--cream) !important; display:flex; flex-direction:column;
+}
+#invt .invt-hero-stage{ position:absolute; inset:0; overflow:hidden; }
+#invt .invt-hero-layer{
+  position:absolute; inset:-6%; opacity:0;
+  transition:opacity 1.2s cubic-bezier(0.16,1,0.3,1);
+  animation:invt-kb 24s ease-in-out infinite alternate;
+}
+#invt .invt-hero-layer:first-child{ opacity:1; }
+#invt .invt-hero-layer img{ width:100%; height:100%; object-fit:cover; }
+#invt .invt-hero-scrim{
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(20,17,15,0.55) 0%, rgba(20,17,15,0.10) 30%, rgba(20,17,15,0.30) 62%, rgba(20,17,15,0.86) 100%);
+}
+#invt .invt-hero-top{
+  position:relative; z-index:3; display:flex; align-items:center; justify-content:space-between;
+  gap:16px; padding:24px clamp(20px,4vw,52px); border-bottom:1px solid rgba(244,239,230,0.16);
+  background:linear-gradient(180deg, rgba(20,17,15,0.62) 0%, rgba(20,17,15,0.28) 60%, rgba(20,17,15,0) 100%);
+}
+#invt .invt-hero-top span{ font-size:11px !important; letter-spacing:0.26em; text-transform:uppercase; }
+#invt .invt-hero-top .a{ font-weight:700 !important; color:var(--cream) !important; }
+#invt .invt-hero-top .b{ font-weight:600 !important; color:var(--lav) !important; }
+#invt .invt-hero-body{ position:relative; z-index:3; flex:1; display:flex; align-items:flex-end; }
+#invt .invt-hero-inner{
+  width:100%; max-width:var(--maxw); margin:0 auto;
+  padding:0 clamp(20px,4vw,52px) clamp(40px,6vw,72px);
+  display:flex; align-items:flex-end; justify-content:space-between; gap:40px; flex-wrap:wrap;
+}
+#invt .invt-hero-tags{
+  display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:0 0 18px;
+}
+#invt .invt-hero-eyebrow{
+  display:inline-block; margin:0; padding:7px 14px; border-radius:999px;
+  background:rgba(20,17,15,0.42); font-size:12px !important; font-weight:700 !important;
+  letter-spacing:0.22em; text-transform:uppercase; color:var(--lav) !important;
+}
+/* ---- price-cut flag (hero) ---- */
+#invt .invt-hero-flag{
+  display:inline-block; margin:0; padding:7px 14px; border-radius:999px;
+  background:var(--purple) !important; background-color:var(--purple) !important;
+  border:1px solid rgba(183,155,208,0.55);
+  font-size:12px !important; font-weight:700 !important;
+  letter-spacing:0.22em; text-transform:uppercase; color:#fff !important;
+}
+#invt .invt-hero-flag[hidden]{ display:none; }
+#invt .invt-hero-flag--status{
+  background:rgba(20,17,15,0.62) !important; background-color:rgba(20,17,15,0.62) !important;
+  border:1px solid rgba(244,239,230,0.45); color:var(--cream) !important;
+}
+#invt .invt-hero-was{
+  color:rgba(231,225,216,0.62) !important; text-decoration:line-through;
+  text-decoration-thickness:2px; text-decoration-color:rgba(183,155,208,0.85);
+  margin-right:12px;
+}
+#invt .invt-hero-now{ color:#fff !important; font-weight:700 !important; font-size:1.15em !important; }
+#invt .invt-hero-addr{
+  margin:0; font-size:var(--fs-hero) !important; line-height:0.98 !important;
+  letter-spacing:-0.02em; color:#fff !important; max-width:14ch;
+}
+#invt .invt-hero-line{
+  margin:22px 0 0; font-size:clamp(1rem,1.4vw,1.2rem) !important; color:var(--cream-2) !important;
+  font-variant-numeric:tabular-nums;
+}
+#invt .invt-hero-cta{ margin-top:34px; }
+#invt .invt-hero-btn{ display:inline-flex; align-items:center; gap:16px; }
+#invt .invt-hero-btn-ico{
+  width:62px; height:62px; flex:0 0 auto; border-radius:999px; display:flex;
+  align-items:center; justify-content:center;
+}
+#invt .invt-hero-btn--tour{ color:#fff !important; }
+#invt .invt-hero-btn--tour .invt-hero-btn-ico{ background:var(--purple) !important; animation:invt-pulse 2.6s ease-out infinite; }
+#invt .invt-hero-btn--tour .invt-hero-btn-label{ color:#fff !important; border-bottom:1px solid rgba(255,255,255,0.45); }
+#invt .invt-hero-btn--soon{ color:var(--cream-2) !important; }
+#invt .invt-hero-btn--soon .invt-hero-btn-ico{ background:rgba(244,239,230,0.12) !important; border:1px solid rgba(244,239,230,0.3); }
+#invt .invt-hero-btn--soon .invt-hero-btn-label{ color:var(--cream-2) !important; border-bottom:1px solid rgba(231,225,216,0.35); }
+#invt .invt-hero-btn-label{ font-weight:600 !important; font-size:1.0625rem !important; letter-spacing:0.03em; padding-bottom:3px; }
+#invt .invt-hero-dots{ display:flex; align-items:center; gap:10px; margin-top:30px; }
+#invt .invt-hero-dot{
+  height:8px; width:8px; border-radius:999px; border:none; padding:0; cursor:pointer;
+  background:rgba(244,239,230,0.4) !important; transition:all 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+#invt .invt-hero-dot[aria-current="true"]{ width:26px; background:var(--lav) !important; }
+#invt .invt-hero-sig{ text-align:right; min-width:200px; }
+#invt .invt-hero-sig .t{ margin:0; font-family:'DM Serif Display',Georgia,serif !important; font-style:italic; font-size:1.4rem !important; color:var(--cream-2) !important; }
+#invt .invt-hero-sig .s{ margin:8px 0 0; font-size:0.92rem !important; color:var(--lav) !important; letter-spacing:0.02em; }
+#invt .invt-hero-scroll{
+  position:absolute; left:50%; bottom:22px; transform:translateX(-50%); z-index:3;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+}
+#invt .invt-hero-scroll span{ font-size:10px !important; font-weight:600 !important; letter-spacing:0.24em; text-transform:uppercase; color:var(--lav) !important; }
+#invt .invt-hero-scroll svg{ animation:invt-bob 2.2s ease-in-out infinite; }
+
+/* ============ INDEX (the finder) ============ */
+#invt .invt-index-sec{ padding:clamp(48px,6vw,88px) clamp(20px,4vw,52px); }
+#invt .invt-index-head{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap;
+  border-bottom:1px solid rgba(26,26,26,0.12); padding-bottom:22px; margin-bottom:8px;
+}
+#invt .invt-index-head h2{ font-size:var(--fs-h2) !important; letter-spacing:-0.015em; }
+#invt .invt-index-head .count{ font-size:0.9rem !important; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted) !important; }
+#invt .invt-index{ display:flex; flex-direction:column; }
+#invt .invt-listing{
+  display:grid; grid-template-columns:172px 1fr auto auto; align-items:center; gap:28px;
+  padding:26px 8px; border-bottom:1px solid rgba(26,26,26,0.12);
+  color:var(--ink) !important; transition:padding-left 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+#invt .invt-listing:hover{ padding-left:16px; }
+#invt .invt-listing-thumb{
+  width:172px; aspect-ratio:4/3; border-radius:var(--r-sm); overflow:hidden;
+  background:linear-gradient(135deg,#a89a86,#5f4f40);
+}
+#invt .invt-listing-thumb img{ width:100%; height:100%; object-fit:cover; transition:transform 0.6s cubic-bezier(0.16,1,0.3,1); }
+#invt .invt-listing:hover .invt-listing-thumb img{ transform:scale(1.05); }
+#invt .invt-listing-addr{ margin:0; font-family:'DM Serif Display',Georgia,serif !important; font-size:clamp(1.4rem,2.4vw,2rem) !important; line-height:1.08 !important; letter-spacing:-0.01em; color:var(--ink) !important; }
+#invt .invt-listing-region{ margin:8px 0 0; font-size:0.9rem !important; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted) !important; }
+#invt .invt-listing-meta{ text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+#invt .invt-listing-flag{
+  display:inline-block; margin:0; padding:5px 11px; border-radius:999px;
+  background:var(--purple) !important; background-color:var(--purple) !important;
+  font-size:10px !important; font-weight:700 !important; line-height:1.2 !important;
+  letter-spacing:0.18em; text-transform:uppercase; color:#fff !important;
+}
+/* quieter status pill — under contract, coming soon, etc. */
+#invt .invt-listing-flag--status{
+  background:#F1ECE4 !important; background-color:#F1ECE4 !important;
+  border:1px solid rgba(26,26,26,0.14); color:var(--ink-2) !important;
+}
+#invt .invt-listing-priceline{
+  margin:0; display:flex; align-items:baseline; justify-content:flex-end; gap:10px; flex-wrap:wrap;
+}
+#invt .invt-price-was{
+  font-family:'DM Serif Display',Georgia,serif !important; font-size:1.05rem !important;
+  color:var(--muted) !important; font-variant-numeric:tabular-nums;
+  text-decoration:line-through; text-decoration-thickness:1.5px; text-decoration-color:var(--purple-bright);
+}
+#invt .invt-listing-price{ font-family:'DM Serif Display',Georgia,serif !important; font-size:1.4rem !important; color:var(--ink) !important; font-variant-numeric:tabular-nums; }
+/* rate unit for rentals — "/mo" set smaller and in the sans so a monthly
+   price doesn't read like a sale price. Additive: sales listings never
+   use this class. */
+#invt .invt-price-unit{ font-family:'Raleway',sans-serif !important; font-size:0.68em !important; font-weight:600 !important; letter-spacing:0.02em; color:var(--muted-2) !important; }
+#invt .invt-hero-now .invt-price-unit{ color:var(--lav) !important; }
+#invt .invt-listing-specs{ font-size:0.84rem !important; color:var(--muted) !important; }
+#invt .invt-listing-go{ font-size:1.4rem !important; color:var(--purple) !important; padding-left:6px; transition:transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+#invt .invt-listing:hover .invt-listing-go{ transform:translateX(6px); }
+
+/* ============ BRIDGE (slim buyer / MLS) ============ */
+#invt .invt-bridge{
+  background:var(--dark) !important; background-color:var(--dark) !important;
+  border-top:1px solid rgba(244,239,230,0.10); border-bottom:1px solid rgba(244,239,230,0.18);
+}
+#invt .invt-bridge-inner{
+  padding:26px clamp(20px,4vw,52px); display:flex; align-items:center; justify-content:space-between;
+  gap:18px 32px; flex-wrap:wrap;
+}
+#invt .invt-bridge-lead{ margin:0; font-family:'DM Serif Display',Georgia,serif !important; font-style:italic; font-size:1.15rem !important; color:#ADA6B0 !important; }
+#invt .invt-bridge-links{ display:flex; flex-wrap:wrap; gap:14px 28px; }
+#invt .invt-bridge-link{ font-size:0.98rem !important; font-weight:600 !important; color:var(--lav) !important; border-bottom:1px solid rgba(183,155,208,0.35); padding-bottom:3px; }
+#invt .invt-bridge-link:hover{ color:var(--cream) !important; border-bottom-color:var(--lav); }
+
+/* ============ PROOF — 60/40 ============ */
+#invt .invt-proof{ background:var(--band) !important; background-color:var(--band) !important; color:var(--cream) !important; overflow:hidden; }
+#invt .invt-proof-inner{ max-width:var(--maxw); margin:0 auto; padding:clamp(56px,7vw,100px) clamp(20px,4vw,52px) clamp(40px,5vw,64px); }
+#invt .invt-proof h2{ font-size:clamp(2.1rem,4.6vw,3.6rem) !important; line-height:1.02 !important; letter-spacing:-0.02em; max-width:24ch; color:#fff !important; }
+#invt .invt-proof-lead{ margin:20px 0 0; font-size:var(--fs-body) !important; line-height:1.5 !important; color:var(--lav-dim) !important; max-width:60ch; }
+#invt .invt-cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(500px,1fr)); gap:28px; margin-top:clamp(40px,5vw,60px); }
+#invt .invt-card{ display:flex; flex-direction:column; background:#fff !important; background-color:#fff !important; border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--sh-card); }
+#invt .invt-card-media{ position:relative; aspect-ratio:16/11; overflow:hidden; background:#2e0b45 !important; }
+#invt .invt-card-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1); }
+#invt .invt-card-img:first-of-type{ opacity:1; }
+#invt .invt-card-tag{
+  position:absolute; top:16px; left:16px; z-index:2; display:flex; flex-direction:column; gap:2px;
+  line-height:1.15; color:var(--cream) !important; background:rgba(20,17,15,0.66); padding:8px 13px; border-radius:8px;
+}
+#invt .invt-card-tag .l1{ font-size:11px !important; font-weight:700 !important; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; }
+#invt .invt-card-tag .l2{ font-size:9.5px !important; font-weight:600 !important; letter-spacing:0.07em; text-transform:uppercase; color:rgba(244,239,230,0.82) !important; white-space:nowrap; }
+#invt .invt-card-loc{ position:absolute; top:16px; right:16px; z-index:2; font-size:0.82rem !important; font-weight:600 !important; color:#fff !important; background:var(--purple) !important; padding:8px 15px; border-radius:999px; }
+#invt .invt-card-prev,#invt .invt-card-next{
+  position:absolute; z-index:2; top:50%; transform:translateY(-50%); width:42px; height:42px;
+  border-radius:999px; border:none; cursor:pointer; background:rgba(20,17,15,0.5) !important; color:#fff !important;
+  display:flex; align-items:center; justify-content:center;
+}
+#invt .invt-card-prev{ left:14px; } #invt .invt-card-next{ right:14px; }
+#invt .invt-card-dots{ position:absolute; z-index:2; left:0; right:0; bottom:16px; display:flex; align-items:center; justify-content:center; gap:8px; }
+#invt .invt-card-dot{ height:7px; width:7px; border-radius:999px; border:none; padding:0; cursor:pointer; background:rgba(255,255,255,0.5) !important; transition:all 0.4s ease; }
+#invt .invt-card-dot[aria-current="true"]{ width:22px; background:#fff !important; }
+#invt .invt-card-body{ display:flex; flex-direction:column; gap:16px; padding:32px; flex:1; }
+#invt .invt-card-body h3{ font-size:1.55rem !important; line-height:1.12 !important; color:var(--ink) !important; }
+#invt .invt-card-sub{ margin:8px 0 0; font-weight:600 !important; font-size:0.95rem !important; color:var(--purple) !important; }
+#invt .invt-card-lines{ display:flex; flex-direction:column; gap:10px; }
+#invt .invt-card-lines p{ margin:0; font-size:1rem !important; line-height:1.5 !important; color:var(--body-c) !important; }
+#invt .invt-card-lines b{ font-weight:600 !important; color:var(--ink) !important; }
+#invt .invt-card-foot{ margin-top:auto; padding-top:18px; border-top:1px solid rgba(26,26,26,0.1); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; }
+#invt .invt-card-stat{ font-size:0.82rem !important; font-weight:600 !important; color:var(--ink) !important; background:#F1ECE4 !important; padding:8px 14px; border-radius:999px; }
+#invt .invt-card-link{ display:inline-flex; align-items:center; gap:6px; font-size:0.92rem !important; font-weight:600 !important; color:var(--purple) !important; }
+#invt .invt-card-soon{ font-size:0.85rem !important; color:var(--muted) !important; }
+
+/* home-value CTA strip (peak conviction, inside proof band) */
+#invt .invt-bandcta{
+  margin-top:clamp(40px,5vw,60px); padding:clamp(28px,4vw,40px) clamp(24px,4vw,44px);
+  border-radius:var(--r-lg); border:1px solid rgba(244,239,230,0.18);
+  background:rgba(244,239,230,0.06) !important;
+  display:flex; align-items:center; justify-content:space-between; gap:20px 32px; flex-wrap:wrap;
+}
+#invt .invt-bandcta-text{ margin:0; font-family:'DM Serif Display',Georgia,serif !important; font-size:clamp(1.15rem,1.8vw,1.4rem) !important; line-height:1.15 !important; color:#fff !important; max-width:24ch; }
+#invt .invt-bandcta-btn{ flex:0 0 auto; display:inline-flex; align-items:center; gap:8px; font-weight:600 !important; font-size:1rem !important; letter-spacing:0.03em; color:var(--band) !important; background:var(--cream) !important; padding:15px 28px; border-radius:var(--r-sm); }
+
+/* ============ MARQUEE ============ */
+#invt .invt-marquee{ background:var(--dark) !important; background-color:var(--dark) !important; padding:22px 0; overflow:hidden; white-space:nowrap; border-top:1px solid rgba(244,239,230,0.1); border-bottom:1px solid rgba(244,239,230,0.1); }
+#invt .invt-marquee-track{ display:inline-flex; align-items:center; gap:0; animation:invt-marquee 64s linear infinite; will-change:transform; }
+#invt .invt-marquee-track .n{ font-family:'DM Serif Display',Georgia,serif !important; font-style:italic; font-size:clamp(1.3rem,2.2vw,1.9rem) !important; color:rgba(244,239,230,0.66) !important; padding:0 30px; white-space:nowrap; transition:color 0.3s ease; }
+#invt a.invt-marquee-track-link:hover,
+#invt a.invt-marquee-track-link:focus-visible{ color:var(--cream) !important; text-decoration:underline; text-underline-offset:5px; text-decoration-thickness:1px; }
+#invt .invt-marquee:hover .invt-marquee-track,
+#invt .invt-marquee:focus-within .invt-marquee-track{ animation-play-state:paused; }
+#invt .invt-marquee-track .dot{ color:var(--lav) !important; }
+
+/* ============ METHOD ============ */
+#invt .invt-method{ padding:clamp(48px,6vw,88px) clamp(20px,4vw,52px); }
+#invt .invt-method h2{ font-size:var(--fs-h2) !important; letter-spacing:-0.015em; }
+#invt .invt-method-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0; margin-top:clamp(36px,4vw,52px); }
+#invt .invt-method-item{ padding:34px; border-top:1px solid rgba(26,26,26,0.14); border-left:1px solid rgba(26,26,26,0.1); }
+#invt .invt-method-item:first-child{ padding-left:0; border-left:none; }
+#invt .invt-method-num{ margin:0 0 16px; font-family:'DM Serif Display',Georgia,serif !important; font-size:2.4rem !important; line-height:1 !important; color:var(--purple) !important; }
+#invt .invt-method-item h3{ margin:0 0 8px; font-family:'Raleway',sans-serif !important; font-weight:600 !important; font-size:1.25rem !important; color:var(--ink) !important; text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px; text-decoration-color:rgba(74,18,110,0.4); }
+#invt a.invt-method-item:hover h3{ color:var(--purple) !important; text-decoration-color:var(--purple) !important; }
+#invt .invt-method-item p{ font-size:1rem !important; line-height:1.5 !important; color:var(--muted-2) !important; }
+
+/* ============ BLUEPRINT ============ */
+#invt .invt-bp{ background:var(--dark) !important; background-color:var(--dark) !important; color:var(--cream) !important; }
+#invt .invt-bp-inner{ max-width:var(--maxw); margin:0 auto; padding:clamp(56px,7vw,100px) clamp(20px,4vw,52px); }
+#invt .invt-bp-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:clamp(36px,5vw,72px); align-items:start; }
+#invt .invt-bp-left{ position:sticky; top:32px; }
+#invt .invt-bp-left h2{ font-size:var(--fs-h2) !important; letter-spacing:-0.015em; color:#fff !important; }
+#invt .invt-bp-left p{ margin:20px 0 28px; font-size:var(--fs-body) !important; line-height:1.5 !important; color:var(--cream-dim) !important; max-width:44ch; }
+#invt .invt-bp-actions{ display:flex; flex-wrap:wrap; gap:14px; }
+#invt .invt-bp-btn{ display:inline-flex; align-items:center; font-weight:600 !important; font-size:0.95rem !important; letter-spacing:0.05em; padding:14px 26px; border-radius:var(--r-sm); }
+#invt .invt-bp-btn--solid{ color:#fff !important; background:var(--purple) !important; }
+#invt .invt-bp-btn--ghost{ color:var(--cream) !important; background:transparent !important; border:1px solid rgba(244,239,230,0.4); }
+#invt .invt-bp-link{ display:flex; align-items:center; justify-content:space-between; gap:20px; padding:24px 6px; color:var(--cream) !important; border-top:1px solid rgba(244,239,230,0.16); transition:padding 0.35s cubic-bezier(0.16,1,0.3,1); }
+#invt .invt-bp-link:last-child{ border-bottom:1px solid rgba(244,239,230,0.16); }
+#invt .invt-bp-link:hover{ padding-left:16px; }
+#invt .invt-bp-link .t{ font-family:'DM Serif Display',Georgia,serif !important; font-size:clamp(1.3rem,2.2vw,1.8rem) !important; line-height:1.1 !important; }
+#invt .invt-bp-link .a{ color:var(--lav) !important; font-size:1.4rem !important; }
+
+/* ============ FOOTER BAND ============ */
+#invt .invt-foot{ background:#fff !important; background-color:#fff !important; border-top:1px solid rgba(26,26,26,0.08); }
+#invt .invt-foot-inner{ max-width:var(--maxw); margin:0 auto; padding:28px clamp(20px,4vw,52px) 34px; display:flex; flex-wrap:wrap; align-items:center; gap:18px; }
+#invt .invt-foot-name{ font-family:'DM Serif Display',Georgia,serif !important; font-size:1.05rem !important; letter-spacing:0.02em; color:var(--ink) !important; flex:0 0 auto; }
+#invt .invt-foot-name span{ color:var(--muted) !important; }
+#invt .invt-foot p{ margin:0; flex:1 1 320px; min-width:260px; font-size:0.8rem !important; line-height:1.45 !important; color:var(--muted) !important; }
+
+/* ============ ANIMATIONS ============ */
+@keyframes invt-kb{ from{ transform:scale(1.02);} to{ transform:scale(1.14);} }
+@keyframes invt-pulse{ 0%{ box-shadow:0 0 0 0 rgba(255,255,255,0.32);} 100%{ box-shadow:0 0 0 26px rgba(255,255,255,0);} }
+@keyframes invt-marquee{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+@keyframes invt-bob{ 0%,100%{ transform:translateY(0); opacity:0.7;} 50%{ transform:translateY(7px); opacity:1;} }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:980px){
+  #invt .invt-cards{ grid-template-columns:1fr !important; }
+}
+@media (max-width:760px){
+  #invt .invt-hero{ min-height:84vh; }
+  #invt .invt-hero-sig{ text-align:left; }
+  #invt .invt-listing{ grid-template-columns:1fr; gap:14px; padding:22px 8px; }
+  #invt .invt-listing:hover{ padding-left:8px; }
+  #invt .invt-listing-thumb{ width:100%; aspect-ratio:16/10; }
+  #invt .invt-listing-meta{ text-align:left; align-items:flex-start; }
+  #invt .invt-listing-priceline{ justify-content:flex-start; }
+  #invt .invt-listing-go{ display:none; }
+  #invt .invt-method-item{ border-left:none !important; padding-left:0; padding-right:0; }
+  #invt .invt-bp-left{ position:static; }
+}
+
+/* ============ REDUCED MOTION (quality floor) ============ */
+@media (prefers-reduced-motion: reduce){
+  #invt .invt-hero-layer,
+  #invt .invt-hero-btn--tour .invt-hero-btn-ico,
+  #invt .invt-hero-scroll svg,
+  #invt .invt-marquee-track{ animation:none !important; }
+  #invt .invt-marquee{ white-space:normal; }
+  #invt .invt-marquee-track{ flex-wrap:wrap; }
+  #invt *{ transition-duration:0.01ms !important; }
+}
+</style>
+
+<div id="invt">
+
+  <!-- ================= HERO ================= -->
+  <!-- Default state = your lead (first featured) listing, rendered in real
+       HTML so there is no empty H1 and no layout shift. JS reconciles it to
+       whatever is flagged data-featured in the index below. -->
+  <section class="invt-hero">
+    <div class="invt-hero-stage" aria-hidden="true">
+      <div class="invt-hero-layer">
+        <img src="https://irinanorrell.com/wp-content/uploads/2026/06/7807-breezy-down-terrace_lucent-real-estate-media_042_pl.webp"
+             alt="" fetchpriority="high" decoding="async">
+      </div>
+    </div>
+    <div class="invt-hero-scrim" aria-hidden="true"></div>
+
+    <div class="invt-hero-top">
+      <span class="a">Irina Norrell Team</span>
+      <span class="b">Virtual Home Tours &mdash; DC Metro</span>
+    </div>
+
+    <div class="invt-hero-body">
+      <div class="invt-hero-inner">
+        <!-- NOTE: this static block must mirror the FIRST data-featured
+             listing in the index below — it is the pre-JS default that
+             stops the H1 being empty. Reorder the index, reorder this. -->
+        <div style="max-width:760px;">
+          <div class="invt-hero-tags">
+            <p class="invt-hero-eyebrow">Now touring &middot; Washington, DC</p>
+            <p class="invt-hero-flag">For rent</p>
+          </div>
+          <h1 class="invt-hero-addr">2600 Pennsylvania Ave NW #8A</h1>
+          <p class="invt-hero-line"><span class="invt-hero-now">$4,800<span class="invt-price-unit">/mo</span></span> &middot; 2 bd &middot; 2 ba &middot; 1,100 sq ft &middot; penthouse balcony</p>
+          <div class="invt-hero-cta">
+            <a class="invt-hero-btn invt-hero-btn--soon" href="https://irinanorrell.com/2600-pennsylvania-ave-nw-8a-washington-dc/">
+              <span class="invt-hero-btn-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#E7E1D8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <span class="invt-hero-btn-label">3D tour coming soon &mdash; view listing</span>
+            </a>
+          </div>
+          <div class="invt-hero-dots" role="tablist" aria-label="Featured listings"></div>
+        </div>
+        <div class="invt-hero-sig">
+          <p class="t">Transparent by design.</p>
+          <p class="s">Compass &middot; DC, MD &amp; VA</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="invt-hero-scroll" aria-hidden="true">
+      <span>Scroll</span>
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#A99FB3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+    </div>
+  </section>
+
+  <!-- ================= INDEX (the finder + single source) ================= -->
+  <section class="invt-index-sec">
+    <div class="invt-wrap">
+      <div class="invt-index-head">
+        <h2>Currently touring</h2>
+        <!-- hand-maintained: update this when you add or retire a block -->
+        <span class="count">1 for sale &middot; 1 for rent &middot; 1 under contract</span>
+      </div>
+
+      <div class="invt-index">
+
+        <!-- ===== LISTING BLOCK — copy this whole <a> to add a home =====
+             href      → the listing detail page
+             data-hero → hero/thumbnail image (WebP)
+             data-tour → 3D tour URL  → pulsing "Watch the 3D tour" button
+                         "soon"        → "3D tour coming soon — view listing"
+                         empty ""      → plain "View listing" (no promise)
+             data-featured → include to put this home in the hero rotation
+
+             RENTALS: identical block. Put the rate in .invt-listing-price
+             with the unit in a nested <span class="invt-price-unit">/mo</span>
+             — the hero reads textContent, so it carries the unit through.
+             Use data-flag="For rent" (tone accent). No data-prev-price.
+        -->
+
+        <!-- ===== 2600 Pennsylvania Ave NW #8A — RENTAL ===== -->
+        <!-- [P1] data-hero + thumb src are PLACEHOLDER paths. Swap both for
+             the real hero photo URL once the photos are uploaded. -->
+        <a class="invt-listing"
+           href="https://irinanorrell.com/2600-pennsylvania-ave-nw-8a-washington-dc/"
+           data-featured
+           data-flag="For rent"
+           data-flag-tone="accent"
+           data-hero="https://irinanorrell.com/wp-content/uploads/2026/08/PH-01-2600-penn-8a-balcony-river-view.webp"
+           data-tour="soon">
+          <span class="invt-listing-thumb"><img src="https://irinanorrell.com/wp-content/uploads/2026/08/PH-01-2600-penn-8a-balcony-river-view.webp" alt="2600 Pennsylvania Avenue NW #8A &mdash; balcony and Potomac River view" loading="lazy" decoding="async"></span>
+          <span class="invt-listing-main">
+            <p class="invt-listing-addr">2600 Pennsylvania Ave NW #8A</p>
+            <p class="invt-listing-region">West End &middot; Washington, DC</p>
+          </span>
+          <span class="invt-listing-meta">
+            <p class="invt-listing-flag">For rent</p>
+            <p class="invt-listing-priceline">
+              <span class="invt-listing-price">$4,800<span class="invt-price-unit">/mo</span></span>
+            </p>
+            <p class="invt-listing-specs">2 bd &middot; 2 ba &middot; 1,100 sq ft &middot; penthouse balcony &middot; available Oct 1</p>
+          </span>
+          <span class="invt-listing-go" aria-hidden="true">&rarr;</span>
+        </a>
+
+        <a class="invt-listing"
+           href="https://irinanorrell.com/7807-breezy-down-terrace-rockville-md/"
+           data-featured
+           data-prev-price="$499,000"
+           data-flag="Price reduced"
+           data-flag-tone="accent"
+           data-hero="https://irinanorrell.com/wp-content/uploads/2026/06/7807-breezy-down-terrace_lucent-real-estate-media_042_pl.webp"
+           data-tour="https://www.homes.com/property/7807-breezy-down-terrace-derwood-md/6jj46ez2zjm2d/?dk=btn7l08214252">
+          <span class="invt-listing-thumb"><img src="https://irinanorrell.com/wp-content/uploads/2026/06/7807-breezy-down-terrace_lucent-real-estate-media_042_pl.webp" alt="7807 Breezy Down Terrace — exterior" loading="lazy" decoding="async"></span>
+          <span class="invt-listing-main">
+            <p class="invt-listing-addr">7807 Breezy Down Terrace</p>
+            <p class="invt-listing-region">Park Overlook &middot; Rockville, MD</p>
+          </span>
+          <span class="invt-listing-meta">
+            <p class="invt-listing-flag">Price reduced</p>
+            <p class="invt-listing-priceline">
+              <span class="invt-price-was">$499,000</span>
+              <span class="invt-listing-price">$475,000</span>
+            </p>
+            <p class="invt-listing-specs">3 bd &middot; 1.5 ba &middot; 1,580 sq ft &middot; finished basement</p>
+          </span>
+          <span class="invt-listing-go" aria-hidden="true">&rarr;</span>
+        </a>
+
+        <a class="invt-listing"
+           href="https://irinanorrell.com/16098-gales-street-laurel-md/"
+           data-featured
+           data-flag="Under contract"
+           data-flag-tone="status"
+           data-hero="https://irinanorrell.com/wp-content/uploads/2026/06/52-pool.webp"
+           data-tour="">
+          <span class="invt-listing-thumb"><img src="https://irinanorrell.com/wp-content/uploads/2026/06/52-pool.webp" alt="16098 Gales Street — pool" loading="lazy" decoding="async"></span>
+          <span class="invt-listing-main">
+            <p class="invt-listing-addr">16098 Gales Street</p>
+            <p class="invt-listing-region">McCahill Estates &middot; West Laurel, MD</p>
+          </span>
+          <span class="invt-listing-meta">
+            <p class="invt-listing-flag invt-listing-flag--status">Under contract</p>
+            <p class="invt-listing-price">$820,000</p>
+            <p class="invt-listing-specs">5 bd &middot; 4.5 ba &middot; 4,970 sq ft &middot; 0.64-acre lot</p>
+          </span>
+          <span class="invt-listing-go" aria-hidden="true">&rarr;</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= BRIDGE (slim buyer / MLS) ================= -->
+  <section class="invt-bridge">
+    <div class="invt-wrap invt-bridge-inner">
+      <p class="invt-bridge-lead">Looking beyond these listings?</p>
+      <div class="invt-bridge-links">
+        <a class="invt-bridge-link" href="https://irinanorrell.com/properties/">Browse all current MLS listings &rarr;</a>
+        <a class="invt-bridge-link" href="https://irinanorrell.com/how-to-buy-a-house-in-dc/">Buying here? Start with our buyer guide &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROOF — 60/40 ================= -->
+  <section class="invt-proof">
+    <div class="invt-proof-inner">
+      <span class="invt-eyebrow invt-eyebrow--dark">Past sales</span>
+      <h2>The 60/40 formula.</h2>
+      <p class="invt-proof-lead">Sixty percent is the work before we list. Forty percent is the work after &mdash; negotiation, timing, and reading the market in real time.</p>
+
+      <div class="invt-cards">
+
+        <!-- card: cash sale -->
+        <div class="invt-card">
+          <div class="invt-card-media">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/01/front-of-the-home-.webp" alt="Chevy Chase cash-sale home — exterior" loading="lazy" decoding="async">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/01/sunroom.webp" alt="Chevy Chase cash-sale home — sunroom" loading="lazy" decoding="async">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/01/8-web-or-mls-RMN04256.webp" alt="Chevy Chase cash-sale home — interior" loading="lazy" decoding="async">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/01/52-web-or-mls-DSC01645.webp" alt="Chevy Chase cash-sale home — interior" loading="lazy" decoding="async">
+            <span class="invt-card-tag"><span class="l1">Off-market</span><span class="l2">Compass Private Exclusives</span></span>
+            <span class="invt-card-loc">Chevy Chase, MD</span>
+            <button class="invt-card-prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button class="invt-card-next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+            <div class="invt-card-dots"><button class="invt-card-dot" type="button" aria-label="Photo 1"></button><button class="invt-card-dot" type="button" aria-label="Photo 2"></button><button class="invt-card-dot" type="button" aria-label="Photo 3"></button><button class="invt-card-dot" type="button" aria-label="Photo 4"></button></div>
+          </div>
+          <div class="invt-card-body">
+            <div><h3>Cash sale, three-day close</h3></div>
+            <div class="invt-card-lines">
+              <p><b>Challenge:</b> A seller wanted top dollar on an as-is home with no repairs — and an offer carrying no contingencies.</p>
+              <p><b>Strategy:</b> We marketed it as a blank-slate lot to investors and developers, ready to pivot to the open market if their offers came in low.</p>
+              <p><b>Negotiation:</b> An offer landed in three days, and we settled terms over four more — across a national holiday.</p>
+              <p><b>Result:</b> All-cash, no contingencies, no buyer-agent commission paid — within 11% of the renovated home next door.</p>
+            </div>
+            <div class="invt-card-foot">
+              <span class="invt-card-stat">All-cash &middot; No contingencies</span>
+              <a class="invt-card-link" href="https://irinanorrell.com/selling-a-home-as-is-in-chevy-chase-md/" target="_blank" rel="noopener">Read full story &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- card: estate sale -->
+        <div class="invt-card">
+          <div class="invt-card-media">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/06/7-.webp" alt="Silver Spring estate sale — exterior" loading="lazy" decoding="async">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/06/2-2.webp" alt="Silver Spring estate sale — interior" loading="lazy" decoding="async">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/06/6-2.webp" alt="Silver Spring estate sale — interior" loading="lazy" decoding="async">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/06/5-1.webp" alt="Silver Spring estate sale — grounds" loading="lazy" decoding="async">
+            <span class="invt-card-tag"><span class="l1">Off-market</span><span class="l2">Estate sale &middot; Compass Private Exclusives</span></span>
+            <span class="invt-card-loc">Silver Spring, MD</span>
+            <button class="invt-card-prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button class="invt-card-next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+            <div class="invt-card-dots"><button class="invt-card-dot" type="button" aria-label="Photo 1"></button><button class="invt-card-dot" type="button" aria-label="Photo 2"></button><button class="invt-card-dot" type="button" aria-label="Photo 3"></button><button class="invt-card-dot" type="button" aria-label="Photo 4"></button></div>
+          </div>
+          <div class="invt-card-body">
+            <div><h3>Estate sale, 14% over asking</h3></div>
+            <div class="invt-card-lines">
+              <p><b>Challenge:</b> An estate sale of a custom home with out-of-town heirs — facing $30K+ in repairs only if it couldn't sell off-market first.</p>
+              <p><b>Strategy:</b> We marketed to Springbrook Forest families — who tend to move back to raise kids near their parents — with a neighbors-only Mother's Day open house.</p>
+              <p><b>Negotiation:</b> The open house drew three offers in 24 hours, then two days of intense back-and-forth with all of them.</p>
+              <p><b>Result:</b> 14% over asking, no contingencies, a 22-day close — and not a dollar spent on repairs.</p>
+            </div>
+            <div class="invt-card-foot">
+              <span class="invt-card-stat">3 offers in 24 hrs &middot; 22-day close</span>
+              <a class="invt-card-link" href="https://irinanorrell.com/" target="_blank" rel="noopener">Watch video &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- card: 3 offers as-is (single image) -->
+        <div class="invt-card">
+          <div class="invt-card-media">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/01/16509-GW-1.webp" alt="Rockville private-exclusive home — exterior" loading="lazy" decoding="async">
+            <span class="invt-card-tag"><span class="l1">Compass Private Exclusive</span></span>
+            <span class="invt-card-loc">Rockville, MD</span>
+          </div>
+          <div class="invt-card-body">
+            <div><h3>As-is sale, 6% over a renovated comp</h3></div>
+            <div class="invt-card-lines">
+              <p><b>Challenge:</b> The home needed many updates and cosmetic repairs, and the seller wanted to test the market quietly first.</p>
+              <p><b>Strategy:</b> We listed via Compass Private Exclusive — no days-on-market clock — while preparing to make the repairs if needed.</p>
+              <p><b>Negotiation:</b> Priced right from the start, three offers competed, giving the seller room to choose terms, not just price.</p>
+              <p><b>Result:</b> Sold as-is for 6% over a partially renovated home nearby.</p>
+            </div>
+            <div class="invt-card-foot">
+              <span class="invt-card-stat">3 offers &middot; Off-market</span>
+              <a class="invt-card-link" href="https://www.youtube.com/watch?v=ajzZ3-ROjFc&t=9s" target="_blank" rel="noopener">Watch video &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- card: townhome over holidays -->
+        <div class="invt-card">
+          <div class="invt-card-media">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2025/12/Z5A8033.webp" alt="Gaithersburg townhome — exterior" loading="lazy" decoding="async">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/01/Z5A7624_final.webp" alt="Gaithersburg townhome — interior" loading="lazy" decoding="async">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/01/Z5A7748_final.jpg" alt="Gaithersburg townhome — interior" loading="lazy" decoding="async">
+            <img class="invt-card-img" src="https://irinanorrell.com/wp-content/uploads/2026/01/Z5A7914_final.jpg" alt="Gaithersburg townhome — interior" loading="lazy" decoding="async">
+            <span class="invt-card-tag"><span class="l1">On-market</span><span class="l2">Virtually staged &middot; Premium marketing</span></span>
+            <span class="invt-card-loc">Gaithersburg, MD</span>
+            <button class="invt-card-prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button class="invt-card-next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+            <div class="invt-card-dots"><button class="invt-card-dot" type="button" aria-label="Photo 1"></button><button class="invt-card-dot" type="button" aria-label="Photo 2"></button><button class="invt-card-dot" type="button" aria-label="Photo 3"></button><button class="invt-card-dot" type="button" aria-label="Photo 4"></button></div>
+          </div>
+          <div class="invt-card-body">
+            <div><h3>Holiday sale, saved after a walkaway</h3></div>
+            <div class="invt-card-lines">
+              <p><b>Challenge:</b> Sell a townhome over the holidays in a shifting market, ahead of a school-boundary vote expected to weigh on older townhomes' value.</p>
+              <p><b>Strategy:</b> Price it for current market, not last year comps.Premium advertizing and marketing with our virtual home tour, 3D Tour, virtually staged, premium photography and drone shots.</p>
+              <p><b>Negotiation:</b> Three offers landed over list in week one; when the buyer got cold feet 10 days later, we reopened and went back under contract in three days.</p>
+              <p><b>Result:</b> Closed in 44 days at 1% under list — after the vote, even larger townhomes nearby sold for less than ours.</p>
+            </div>
+            <div class="invt-card-foot">
+              <span class="invt-card-stat">44-day close &middot; 1% under list</span>
+              <span class="invt-card-soon">Story coming soon</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- home-value CTA — placed at peak conviction, right after proof -->
+      <div class="invt-bandcta">
+        <p class="invt-bandcta-text">Curious what your home is worth right now?</p>
+        <a class="invt-bandcta-btn" href="https://irinanorrell.com/whats-my-home-worth-dc-md-va/">What's my home worth? &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MARQUEE (JS clones the track for a seamless loop) ================= -->
+  <div class="invt-marquee">
+    <div class="invt-marquee-track">
+      <a class="n invt-marquee-track-link" href="https://irinanorrell.com/american-university-park-washington-dc/">American University Park</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/berkley-dc/">Berkley</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/burleith-dc/">Burleith</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/cathedral-heights-dc/">Cathedral Heights</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/chevy-chase-dc/">Chevy Chase DC</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/cleveland-park-dc/">Cleveland Park</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/foggy-bottom-and-west-end-dc/">Foggy Bottom</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/forest-hills-van-ness-dc/">Forest Hills / Van Ness</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/foxhall-dc/">Foxhall</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/georgetown-dc/">Georgetown</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/glover-park-dc/">Glover Park</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/kalorama-dc/">Kalorama</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/kent-dc/">Kent</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/north-cleveland-park-dc/">North Cleveland Park</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/the-palisades-dc/">The Palisades</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/spring-valley-dc/">Spring Valley</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/tenleytown-dc/">Tenleytown</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/wesley-heights-dc/">Wesley Heights</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/woodley-park-dc/">Woodley Park</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/bethesda-md/">Bethesda</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/cabin-john-md/">Cabin John</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/chevy-chase-md-homes-for-sale/">Chevy Chase MD</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/friendship-heights-md/">Friendship Heights</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/garrett-park-md/">Garrett Park</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/glen-echo-md/">Glen Echo</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/kensington-md/">Kensington</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/north-bethesda-md/">North Bethesda</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/olney-md/">Olney</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/potomac-md/">Potomac</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/rockville-md/">Rockville</a><span class="dot">&bull;</span><a class="n invt-marquee-track-link" href="https://irinanorrell.com/silver-spring-md/">Silver Spring</a><span class="dot">&bull;</span>
+    </div>
+  </div>
+
+  <!-- ================= METHOD ================= -->
+  <section class="invt-method">
+    <div class="invt-wrap">
+      <span class="invt-eyebrow">The method</span>
+      <h2>A listing, fully prepared.</h2>
+      <div class="invt-method-grid">
+        <a class="invt-method-item" href="https://irinanorrell.com/free-home-staging-and-inspection-in-dc/">
+          <p class="invt-method-num">01</p>
+          <h3>Complimentary staging</h3>
+          <p>Professional staging on every qualifying listing — first impressions sell homes.</p>
+        </a>
+        <a class="invt-method-item" href="https://irinanorrell.com/free-home-staging-and-inspection-in-dc/">
+          <p class="invt-method-num">02</p>
+          <h3>Pre-listing inspection</h3>
+          <p>We surface issues before buyers do, so negotiations start from a position of strength.</p>
+        </a>
+        <a class="invt-method-item" href="https://irinanorrell.com/hybrid-home-sale-dc-md-va/">
+          <p class="invt-method-num">03</p>
+          <h3>The hybrid sale</h3>
+          <p>Test the market privately through Compass Private Exclusives, then go public — on your terms.</p>
+        </a>
+        <a class="invt-method-item" href="https://irinanorrell.com/dc-housing-market-reports/">
+          <p class="invt-method-num">04</p>
+          <h3>Data-first marketing</h3>
+          <p>Pricing and positioning grounded in the numbers — not guesswork.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= BLUEPRINT ================= -->
+  <section class="invt-bp" id="invt-blueprint">
+    <div class="invt-bp-inner">
+      <div class="invt-bp-grid">
+        <div class="invt-bp-left">
+          <span class="invt-eyebrow invt-eyebrow--dark">The seller's blueprint</span>
+          <h2>Everything you need before you list.</h2>
+          <p>The full playbook &mdash; pricing, process, and what to expect, start to close.</p>
+          <div class="invt-bp-actions">
+            <a class="invt-bp-btn invt-bp-btn--solid" href="sms:+12024958373">Text us</a>
+            <a class="invt-bp-btn invt-bp-btn--ghost" href="tel:+12024958373">Call (202) 495-8373</a>
+          </div>
+        </div>
+        <div>
+          <a class="invt-bp-link" href="https://irinanorrell.com/selling-your-home-in-dc-md-and-va/"><span class="t">Step-by-step selling guide</span><span class="a" aria-hidden="true">&rarr;</span></a>
+          <a class="invt-bp-link" href="https://irinanorrell.com/home-selling-costs-in-dc-md-and-va/"><span class="t">Costs &amp; calculator</span><span class="a" aria-hidden="true">&rarr;</span></a>
+          <a class="invt-bp-link" href="https://irinanorrell.com/what-to-expect-from-a-real-estate-agent/"><span class="t">What does a listing agent do?</span><span class="a" aria-hidden="true">&rarr;</span></a>
+          <a class="invt-bp-link" href="https://irinanorrell.com/dc-metro-home-seller-success-stories/"><span class="t">Seller success stories</span><span class="a" aria-hidden="true">&rarr;</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER BAND ================= -->
+  <section class="invt-foot">
+    <div class="invt-foot-inner">
+      <span class="invt-foot-name">Irina Norrell Team <span>&middot; Compass</span></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#8C857E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:24px; height:24px; flex:0 0 auto;"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9h14v-9"/><path d="M9.5 13.5h5M9.5 16h5"/></svg>
+      <p>Equal Housing Opportunity. Irina Norrell &middot; Compass &middot; 5471 Wisconsin Ave #300, Chevy Chase, MD 20815 &middot; Licensed in DC, MD &amp; VA. Listing information is deemed reliable but not guaranteed. &copy; Bright MLS.</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var NS = window.invtPage = window.invtPage || {};
+  if (NS.initialized) return; NS.initialized = true;
+
+  function init(){
+    var root = document.getElementById('invt');
+    if (!root) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---- Single source: the index anchors drive the hero ---- */
+    var listings = Array.prototype.slice.call(root.querySelectorAll('.invt-listing'));
+    var featured = listings.filter(function(el){ return el.hasAttribute('data-featured'); });
+    if (!featured.length) featured = listings;
+
+    function esc(s){
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function read(el){
+      function txt(sel){ var n = el.querySelector(sel); return n ? n.textContent.trim() : ''; }
+      /* Rentals nest <span class="invt-price-unit">/mo</span> inside the price.
+         textContent would flatten it to an unstyled "/mo", so keep the authored
+         markup too and prefer it when painting the hero. */
+      function html(sel){ var n = el.querySelector(sel); return n ? n.innerHTML.trim() : ''; }
+      return {
+        href: el.getAttribute('href') || '#',
+        hero: el.getAttribute('data-hero') || '',
+        tour: el.getAttribute('data-tour') || '',
+        addr: txt('.invt-listing-addr'),
+        region: (txt('.invt-listing-region').split('\u00b7').pop() || '').trim() || txt('.invt-listing-region'),
+        price: txt('.invt-listing-price'),
+        priceHtml: html('.invt-listing-price'),
+        was: el.getAttribute('data-prev-price') || '',
+        flag: el.getAttribute('data-flag') || '',
+        tone: el.getAttribute('data-flag-tone') || '',
+        specs: txt('.invt-listing-specs')
+      };
+    }
+    var data = featured.map(read);
+
+    /* ---- HERO ---- */
+    var stage    = root.querySelector('.invt-hero-stage');
+    var section  = root.querySelector('.invt-hero');
+    var elEyebrow= root.querySelector('.invt-hero-eyebrow');
+    var elFlag   = root.querySelector('.invt-hero-flag');
+    var elAddr   = root.querySelector('.invt-hero-addr');
+    var elLine   = root.querySelector('.invt-hero-line');
+    var elCta    = root.querySelector('.invt-hero-cta');
+    var elDots   = root.querySelector('.invt-hero-dots');
+    var layers   = [];
+
+    if (stage && data.length){
+      var first = stage.querySelector('.invt-hero-layer');
+      if (first) layers.push(first);
+      for (var i = layers.length; i < data.length; i++){
+        var lay = document.createElement('div');
+        lay.className = 'invt-hero-layer'; lay.style.opacity = '0';
+        var im = document.createElement('img');
+        im.src = data[i].hero; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async';
+        lay.appendChild(im); stage.appendChild(lay); layers.push(lay);
+      }
+      if (elDots && data.length > 1){
+        data.forEach(function(d, i){
+          var b = document.createElement('button');
+          b.type = 'button'; b.className = 'invt-hero-dot';
+          b.setAttribute('role', 'tab');
+          b.setAttribute('aria-label', 'Show ' + (d.addr || ('listing ' + (i + 1))));
+          b.addEventListener('click', function(){ setHero(i); restart(); });
+          elDots.appendChild(b);
+        });
+      }
+    }
+
+    function renderCta(d){
+      if (!elCta) return;
+      if (d.tour && d.tour !== 'soon'){
+        elCta.innerHTML =
+          '<a class="invt-hero-btn invt-hero-btn--tour" href="' + d.tour + '" target="_blank" rel="noopener">' +
+          '<span class="invt-hero-btn-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>' +
+          '<span class="invt-hero-btn-label">Watch the 3D tour</span></a>';
+      } else if (d.tour === 'soon'){
+        elCta.innerHTML =
+          '<a class="invt-hero-btn invt-hero-btn--soon" href="' + d.href + '">' +
+          '<span class="invt-hero-btn-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#E7E1D8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>' +
+          '<span class="invt-hero-btn-label">3D tour coming soon &mdash; view listing</span></a>';
+      } else {
+        elCta.innerHTML =
+          '<a class="invt-hero-btn invt-hero-btn--soon" href="' + d.href + '">' +
+          '<span class="invt-hero-btn-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#E7E1D8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>' +
+          '<span class="invt-hero-btn-label">View listing</span></a>';
+      }
+    }
+
+    var cur = 0;
+    function setHero(n){
+      cur = n; var d = data[n];
+      layers.forEach(function(l, i){ l.style.opacity = (i === n) ? '1' : '0'; });
+      Array.prototype.forEach.call(root.querySelectorAll('.invt-hero-dot'), function(b, i){
+        b.setAttribute('aria-current', i === n ? 'true' : 'false');
+        b.setAttribute('aria-selected', i === n ? 'true' : 'false');
+      });
+      if (elEyebrow) elEyebrow.textContent = 'Now touring \u00b7 ' + d.region;
+      if (elFlag){
+        elFlag.className = 'invt-hero-flag' + (d.tone === 'status' ? ' invt-hero-flag--status' : '');
+        if (d.flag){ elFlag.textContent = d.flag; elFlag.hidden = false; }
+        else { elFlag.textContent = ''; elFlag.hidden = true; }
+      }
+      if (elAddr) elAddr.textContent = d.addr;
+      if (elLine){
+        elLine.innerHTML =
+          (d.was ? '<span class="invt-hero-was">' + esc(d.was) + '</span>' : '') +
+          '<span class="invt-hero-now">' + (d.priceHtml || esc(d.price)) + '</span>' +
+          ' \u00b7 ' + esc(d.specs);
+      }
+      renderCta(d);
+    }
+
+    var timer;
+    function restart(){
+      clearInterval(timer);
+      if (!reduce && data.length > 1){
+        timer = setInterval(function(){ setHero((cur + 1) % data.length); }, 5600);
+      }
+    }
+    if (data.length){ setHero(0); restart(); }
+    if (section){
+      section.addEventListener('mouseenter', function(){ clearInterval(timer); });
+      section.addEventListener('mouseleave', restart);
+      section.addEventListener('focusin', function(){ clearInterval(timer); });
+      section.addEventListener('focusout', restart);
+    }
+
+    /* ---- MARQUEE: duplicate the set for a seamless -50% loop.
+       The clone is hidden from screen readers and removed from the tab
+       order so the 31 links aren't announced or focused twice. ---- */
+    var track = root.querySelector('.invt-marquee-track');
+    if (track && !reduce){
+      var originals = Array.prototype.slice.call(track.children);
+      originals.forEach(function(node){
+        var c = node.cloneNode(true);
+        c.setAttribute('aria-hidden', 'true');
+        if (c.tagName === 'A') c.setAttribute('tabindex', '-1');
+        track.appendChild(c);
+      });
+    }
+
+    /* ---- PAST-SALES card carousels (scoped per card) ---- */
+    Array.prototype.forEach.call(root.querySelectorAll('.invt-card'), function(card){
+      var imgs = Array.prototype.slice.call(card.querySelectorAll('.invt-card-img'));
+      var dots = Array.prototype.slice.call(card.querySelectorAll('.invt-card-dot'));
+      var prev = card.querySelector('.invt-card-prev');
+      var next = card.querySelector('.invt-card-next');
+      var len = imgs.length, pos = 0, cTimer;
+      if (len <= 1) return;
+      function show(j){
+        pos = ((j % len) + len) % len;
+        imgs.forEach(function(im, i){ im.style.opacity = i === pos ? '1' : '0'; });
+        dots.forEach(function(dt, i){ dt.setAttribute('aria-current', i === pos ? 'true' : 'false'); });
+      }
+      function pace(){ clearInterval(cTimer); if (!reduce){ cTimer = setInterval(function(){ show(pos + 1); }, 4800); } }
+      if (prev) prev.addEventListener('click', function(){ show(pos - 1); pace(); });
+      if (next) next.addEventListener('click', function(){ show(pos + 1); pace(); });
+      dots.forEach(function(dt, i){ dt.addEventListener('click', function(){ show(i); pace(); }); });
+      card.addEventListener('mouseenter', function(){ clearInterval(cTimer); });
+      card.addEventListener('mouseleave', pace);
+      card.addEventListener('focusin', function(){ clearInterval(cTimer); });
+      card.addEventListener('focusout', pace);
+      show(0); pace();
+    });
+  }
+
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else { init(); }
+})();
+</script>
