@@ -71,13 +71,17 @@
   <div style="position:absolute;inset:20px;z-index:3;border:1px solid rgba(244,239,230,.24);pointer-events:none"></div>
   <div style="position:absolute;left:0;right:0;bottom:0;z-index:4">
     <div style="max-width:1340px;margin:0 auto;padding:0 clamp(22px,5vw,52px) clamp(36px,5vw,56px)">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;text-shadow:0 1px 14px rgba(0,0,0,.6)">
+      <!-- Price reduced $499,000 -> $475,000. The flag, the struck-through
+           former price below, and the specs-grid Price cell all have to move
+           together, and they have to match the hub's listing block. -->
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;text-shadow:0 1px 14px rgba(0,0,0,.6)">
+        <span style="font:600 11px/1 'Raleway';letter-spacing:.18em;text-transform:uppercase;color:#221f1f;background:#b89b6a;padding:7px 13px;border-radius:999px">Price reduced</span>
         <span style="font:600 11px/1 'Raleway';letter-spacing:.2em;text-transform:uppercase;color:#cdb280">Active</span>
         <span style="width:4px;height:4px;border-radius:50%;background:#b89b6a"></span>
         <span style="font:600 11px/1 'Raleway';letter-spacing:.18em;text-transform:uppercase;color:rgba(244,239,230,.86)">Park Overlook</span>
       </div>
       <h1 class="bz-serif" style="font-size:clamp(46px,6.4vw,96px);line-height:.92;letter-spacing:-.01em;color:#f4efe6;margin:0;text-shadow:0 2px 30px rgba(0,0,0,.5)">7807 Breezy Down Terrace Rockville, MD</h1>
-      <p class="bz-serif" style="font-size:clamp(30px,3.8vw,46px);color:#f4efe6;margin:14px 0 0;line-height:1;text-shadow:0 2px 20px rgba(0,0,0,.5)">$499,000</p>
+      <p class="bz-serif" style="font-size:clamp(30px,3.8vw,46px);color:#f4efe6;margin:14px 0 0;line-height:1;text-shadow:0 2px 20px rgba(0,0,0,.5)"><span style="font-size:.6em;color:rgba(244,239,230,.62);text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:#b89b6a;margin-right:16px">$499,000</span>$475,000</p>
       <div style="display:flex;flex-wrap:wrap;gap:36px;align-items:baseline;margin:24px 0 28px;text-shadow:0 1px 12px rgba(0,0,0,.6)">
         <div><span class="bz-serif" style="font-size:28px;color:#f4efe6">3</span><span style="display:block;font:600 10px/1 'Raleway';letter-spacing:.16em;text-transform:uppercase;color:#a39d92;margin-top:5px">Bedrooms</span></div>
         <div><span class="bz-serif" style="font-size:28px;color:#f4efe6">1.5</span><span style="display:block;font:600 10px/1 'Raleway';letter-spacing:.16em;text-transform:uppercase;color:#a39d92;margin-top:5px">Baths</span></div>
@@ -93,7 +97,8 @@
         <a href="sms:+12024958373?body=Hi!%20I'd%20like%20to%20schedule%20a%20tour%20of%207807%20Breezy%20Down%20Terrace.%0A%0AFull%20Name%3A%0ATime%20and%20Day%20you%20prefer%20to%20see%20the%20home%3A" class="bz-link-hover" style="display:inline-flex;align-items:center;gap:8px;font:600 13px/1 'Raleway';letter-spacing:.06em;color:#221f1f;background:#b89b6a;padding:14px 22px;border-radius:999px;text-decoration:none">Schedule a private tour →</a>
         <a href="tel:+12024958373" class="bz-outline-hover" style="display:inline-flex;align-items:center;font:600 13px/1 'Raleway';letter-spacing:.06em;color:#f4efe6;background:rgba(244,239,230,.06);border:1px solid rgba(244,239,230,.28);padding:13px 21px;border-radius:999px;text-decoration:none">Call (202) 495-8373</a>
       </div>
-      <!-- [P2] 3D tour: replace href with the PUBLIC tour URL (homes.com dashboard link is private). -->
+      <!-- 3D tour URL confirmed correct. Same link appears again in the tour
+           card grid below and in the featured-listings hub — change all three. -->
       <div style="margin-top:22px">
         <a href="https://www.homes.com/property/7807-breezy-down-terrace-derwood-md/6jj46ez2zjm2d/?dk=btn7l08214252" target="_blank" rel="noopener" class="bz-3d-hero" style="display:inline-flex;align-items:center;gap:14px;text-decoration:none;color:#f4efe6">
           <span style="flex:none;width:48px;height:48px;border-radius:50%;background:#b89b6a;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,0,0,.4);transition:background .25s"><svg viewBox="0 0 24 24" fill="#221f1f" style="width:18px;height:18px;margin-left:3px"><path d="M8 5v14l11-7z"/></svg></span>
@@ -143,7 +148,7 @@
       <h2 class="bz-serif" style="font-size:clamp(28px,3.4vw,44px);line-height:1.08;color:#f4efe6;margin:14px 0 0;text-wrap:balance">Walk it in 3D, then see the layout.</h2>
     </div>
     <div class="bz-tour-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1100px;margin:0 auto">
-      <!-- [P2] 3D tour: replace href with the PUBLIC tour URL (the homes.com dashboard link is private). -->
+      <!-- 3D tour URL confirmed correct (same link as the hero button above). -->
       <a href="https://www.homes.com/property/7807-breezy-down-terrace-derwood-md/6jj46ez2zjm2d/?dk=btn7l08214252" target="_blank" rel="noopener" class="bz-tour-card" style="cursor:pointer;background:#262220;border:1px solid rgba(244,239,230,.10);border-radius:16px;padding:34px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;text-decoration:none">
         <svg viewBox="0 0 48 48" fill="none" stroke="#b89b6a" stroke-width="1.3" style="width:40px;height:40px;margin-bottom:18px"><path d="M24 6l16 9v18l-16 9-16-9V15z"/><path d="M8 15l16 9 16-9M24 24v18"/></svg>
         <p class="bz-serif" style="font-size:20px;color:#f4efe6;margin:0 0 6px">3D walkthrough</p>
@@ -239,7 +244,7 @@
     <!-- 18 cells across 6 columns = 3 even rows (3 cols at 920px, 2 at 680px,
          both also even). Keep the cell count a multiple of 6 when editing. -->
     <div class="bz-spec" style="display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(244,239,230,.10);border:1px solid rgba(244,239,230,.10);border-radius:16px;overflow:hidden">
-      <div style="background:#221f1f;padding:22px 20px"><p style="font:600 10px/1 'Raleway';letter-spacing:.14em;text-transform:uppercase;color:#a39d92;margin:0 0 8px">Price</p><p class="bz-serif" style="font-size:21px;color:#f4efe6;margin:0">$499,000</p></div>
+      <div style="background:#221f1f;padding:22px 20px"><p style="font:600 10px/1 'Raleway';letter-spacing:.14em;text-transform:uppercase;color:#a39d92;margin:0 0 8px">Price</p><p class="bz-serif" style="font-size:21px;color:#f4efe6;margin:0">$475,000</p><p class="bz-serif" style="font-size:14px;color:#6f6a62;margin:5px 0 0;text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:#b89b6a">$499,000</p></div>
       <div style="background:#221f1f;padding:22px 20px"><p style="font:600 10px/1 'Raleway';letter-spacing:.14em;text-transform:uppercase;color:#a39d92;margin:0 0 8px">Type</p><p class="bz-serif" style="font-size:21px;color:#f4efe6;margin:0">Colonial Townhome</p></div>
       <div style="background:#221f1f;padding:22px 20px"><p style="font:600 10px/1 'Raleway';letter-spacing:.14em;text-transform:uppercase;color:#a39d92;margin:0 0 8px">Year built</p><p class="bz-serif" style="font-size:21px;color:#f4efe6;margin:0">1985</p></div>
       <!-- Square footage, per MLS/assessor. Five cells so the number is never

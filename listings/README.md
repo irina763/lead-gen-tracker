@@ -75,6 +75,19 @@ The hub block needs the hero photo URL in two places (`data-hero` and the thumb 
 
 ---
 
+## 7807 Breezy Down Terrace — price reduction
+
+$499,000 → **$475,000**, shown three ways on the detail page so it matches the hub:
+
+- hero: a filled **Price reduced** flag next to "Active"
+- hero price: `$499,000` struck through, `$475,000` beside it
+- specs grid Price cell: `$475,000` with the struck former price beneath
+
+The 3D tour URL is confirmed correct and appears in three places (hero button, tour
+card grid, hub block) — change all three together.
+
+---
+
 ## 7807 Breezy Down Terrace — square footage correction
 
 Per MLS / county assessor:
