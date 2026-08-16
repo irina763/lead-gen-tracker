@@ -190,7 +190,7 @@
         <p style="font:600 11px/1 'Raleway',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#b89b6a;margin:0">Explore by room</p>
         <h2 class="pt-serif" style="font-size:clamp(28px,3.4vw,44px);line-height:1.08;color:#f4efe6;margin:14px 0 0;text-wrap:balance">The whole home on one level.</h2>
       </div>
-      <p style="max-width:42ch;color:#a39d92;font-size:15px;line-height:1.55;margin:0">Single-level living eight floors up &mdash; entry, living and dining, a galley kitchen, and two bedroom suites at opposite ends. Step through each room.</p>
+      <p style="max-width:42ch;color:#a39d92;font-size:15px;line-height:1.55;margin:0">Single-level living eight floors up &mdash; an open living and dining space, a galley kitchen off the hallway, and the bedrooms set apart from it. Step through each room.</p>
     </div>
     <!-- Level switcher renders only when there is more than one level.
          A one-floor unit gets a flat room track. -->
@@ -206,9 +206,9 @@
     <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap;margin-bottom:36px">
       <div>
         <p style="font:600 11px/1 'Raleway',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#b89b6a;margin:0">Outside the glass</p>
-        <h2 class="pt-serif" style="font-size:clamp(28px,3.4vw,44px);line-height:1.08;color:#f4efe6;margin:14px 0 0;text-wrap:balance">A balcony pointed at the river.</h2>
+        <h2 class="pt-serif" style="font-size:clamp(28px,3.4vw,44px);line-height:1.08;color:#f4efe6;margin:14px 0 0;text-wrap:balance">The balcony, and the wall of glass beside it.</h2>
       </div>
-      <p style="max-width:44ch;color:#a39d92;font-size:15px;line-height:1.55;margin:0">The private balcony opens off the living room, eight floors above Pennsylvania Avenue &mdash; the Potomac on one side, Georgetown rooftops catching the last of the light on the other. Tap any photo to open the full set.</p>
+      <p style="max-width:44ch;color:#a39d92;font-size:15px;line-height:1.55;margin:0">The private balcony opens straight off the living room, eight floors above Pennsylvania Avenue, with the fireplace and built-ins along the wall beside it. Tap any photo to open the full set.</p>
     </div>
     <div id="pt-viewset" class="pt-plates" style="display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(150px,17vw,224px);gap:14px"></div>
   </div>
@@ -221,7 +221,7 @@
       <p style="font:600 11px/1 'Raleway',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#b89b6a;margin:0">The building</p>
       <h2 class="pt-serif" style="font-size:clamp(28px,3.4vw,44px);line-height:1.08;color:#f4efe6;margin:14px 0 0;text-wrap:balance">An Art Deco mid-rise on Pennsylvania Avenue.</h2>
     </div>
-    <div class="pt-loc-grid" style="display:grid;grid-template-columns:0.92fr 1.08fr;gap:clamp(24px,4vw,56px);align-items:start">
+    <div class="pt-loc-grid" id="pt-building-grid" style="display:grid;grid-template-columns:0.92fr 1.08fr;gap:clamp(24px,4vw,56px);align-items:start">
       <div>
         <p style="font-size:16px;line-height:1.62;color:#d9d2c6;margin:0 0 16px">Built in 2001 in an Art Deco idiom, the building sits at the West End edge of Foggy Bottom &mdash; eight floors, elevator service, intercom entry, and an attached garage. #8A is a top-floor unit, so there is no one overhead.</p>
         <p style="font-size:16px;line-height:1.62;color:#d9d2c6;margin:0">Day to day it reads as a quiet, small-building address rather than a high-rise: you take one elevator, you park under your own roof, and the front door opens onto one of the best-connected corners in the city.</p>
@@ -240,7 +240,7 @@
       <p style="font:600 11px/1 'Raleway',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#b89b6a;margin:0">The location</p>
       <h2 class="pt-serif" style="font-size:clamp(28px,3.4vw,44px);line-height:1.08;color:#f4efe6;margin:14px 0 0;text-wrap:balance">West End &mdash; between Georgetown and the river.</h2>
     </div>
-    <p style="color:#a39d92;font-size:15px;line-height:1.55;margin:0 0 22px;max-width:62ch">From above: the building, the avenue, and the waterfront and parkland that frame it. Tap any image to enlarge.</p>
+    <p id="pt-hood-intro" style="color:#a39d92;font-size:15px;line-height:1.55;margin:0 0 22px;max-width:62ch">From above: the building, the avenue, and the waterfront and parkland that frame it. Tap any image to enlarge.</p>
     <div id="pt-hood" class="pt-plates" style="display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:clamp(140px,15vw,200px);gap:14px;margin-bottom:40px"></div>
     <div class="pt-loc-grid" id="pt-loc-grid" style="display:grid;grid-template-columns:0.92fr 1.08fr;gap:clamp(24px,4vw,56px);align-items:start">
       <div>
@@ -512,16 +512,16 @@
   var PROXI_MAP_ID = '';
 
   /* ============================================================
-     2. PHOTOS
-        B = the WordPress upload folder for this listing.
-        Every slug below starts with "PH-" and therefore renders a
-        dark placeholder tile. Replace one slug at a time with the
-        real filename (no extension) as photos go live.
-        When the last "PH-" is gone, set USE_PLACEHOLDERS = false so
-        a typo shows as a broken image instead of hiding silently.
+     2. PHOTOS — all live. Folder confirmed 2026/08/.
+        Slugs are the real WordPress filenames, including the odd
+        trailing hyphens and WP's -1 / -1-1 duplicate-name counters
+        and the -e<timestamp> edited-image suffix. Do not "tidy"
+        these strings: they must match the upload byte for byte.
+        USE_PLACEHOLDERS is now false, so a typo shows as a broken
+        image rather than hiding as a dark tile.
      ============================================================ */
-  var USE_PLACEHOLDERS = true;
-  var B = 'https://irinanorrell.com/wp-content/uploads/2026/08/';  /* [P1] confirm folder */
+  var USE_PLACEHOLDERS = false;
+  var B = 'https://irinanorrell.com/wp-content/uploads/2026/08/';
   var PH = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'%3E%3Crect width='16' height='9' fill='%232c2826'/%3E%3C/svg%3E";
 
   function px(slug){
@@ -529,132 +529,111 @@
     return USE_PLACEHOLDERS ? PH : (B + slug + '.webp');
   }
 
-  var HERO_IMG  = px('PH-01-2600-penn-8a-balcony-river-view');
+  /* Every supplied file, named by what it shows. */
+  var IMG = {
+    livingPanoramic : 'panoramic-view-from-the-living-room',
+    livingFireplace : 'living-room-with-fireplace-and-penhouse-balcony-2',
+    livingHallway   : 'view-of-the-hallway-living-room-and-kitchen',
+    kitchen         : 'kitchen',
+    kitchenAlt      : 'kitchen-another-angle',
+    kitchenGalley   : 'Galley-Kitchen-zoomed-out-1',
+    bedroomA        : 'One-Bed-with-the-city-view-',
+    bedroomB        : 'One-Bed-with-the-city-view-1-1',
+    bathA           : 'One-bathroom-',
+    bathB           : 'One-bathroom-1-1',
+    balconyBuiltA   : 'balcony-with-fireplace-and-built-ins',
+    balconyBuiltB   : 'balcony-with-fireplace-and-built-ins-1',
+    balconyAngleA   : 'balcony-another-angle-e1786804075244-1',
+    balconyAngleB   : 'balcony-another-angle-e1786804075244-1-1'
+  };
+
+  /* The view is the product, so the panorama leads. */
+  var HERO_IMG  = px(IMG.livingPanoramic);
   var HERO_LOOP = [
-    px('PH-02-2600-penn-8a-living-room-sunset'),
-    px('PH-03-2600-penn-8a-building-exterior'),
-    px('PH-04-2600-penn-8a-georgetown-from-the-balcony')
+    px(IMG.livingFireplace),
+    px(IMG.balconyBuiltA),
+    px(IMG.bedroomA)
   ];
 
-  /* Extra photos per room — the lead photo is the room's own `img`. */
+  /* Extra photos per room — the lead photo is the room's own `img`,
+     so it is NOT repeated here. */
   var GAL = {
-    living   : [
-      {src:px('PH-11-2600-penn-8a-living-room'),                 alt:'Living room, alternate angle'},
-      {src:px('PH-12-2600-penn-8a-fireplace'),                   alt:'Living room fireplace'},
-      {src:px('PH-13-2600-penn-8a-living-room-to-balcony'),      alt:'Living room opening to the balcony'}
+    living : [
+      {src:px(IMG.livingFireplace), alt:'Living room with fireplace, opening to the penthouse balcony'},
+      {src:px(IMG.livingHallway),   alt:'Hallway looking through to the living room and kitchen'}
     ],
-    dining   : [
-      {src:px('PH-15-2600-penn-8a-dining-area'),                 alt:'Dining area, alternate angle'}
+    kitchen : [
+      {src:px(IMG.kitchenAlt),    alt:'Kitchen, another angle'},
+      {src:px(IMG.kitchenGalley), alt:'The galley kitchen, zoomed out'}
     ],
-    kitchen  : [
-      {src:px('PH-17-2600-penn-8a-galley-kitchen'),              alt:'Galley kitchen, alternate angle'},
-      {src:px('PH-18-2600-penn-8a-kitchen-appliances'),          alt:'Kitchen appliances'}
+    bedroom : [
+      {src:px(IMG.bedroomB), alt:'Bedroom with the city view, second angle'}
     ],
-    primary  : [
-      {src:px('PH-21-2600-penn-8a-primary-bedroom'),             alt:'Primary bedroom, alternate angle'},
-      {src:px('PH-22-2600-penn-8a-primary-closet'),              alt:'Primary bedroom closet'}
+    bath : [
+      {src:px(IMG.bathB), alt:'Bathroom, second angle'}
     ],
-    primarybath:[
-      {src:px('PH-24-2600-penn-8a-primary-bath'),                alt:'Primary bath, alternate angle'}
+    views : [
+      {src:px(IMG.balconyBuiltA), alt:'Balcony with the fireplace and built-ins'},
+      {src:px(IMG.balconyBuiltB), alt:'Balcony with the fireplace and built-ins, second angle'},
+      {src:px(IMG.balconyAngleA), alt:'The balcony from another angle'},
+      {src:px(IMG.balconyAngleB), alt:'The balcony from another angle, second frame'}
     ],
-    bed2     : [
-      {src:px('PH-26-2600-penn-8a-second-bedroom'),              alt:'Second bedroom, alternate angle'}
-    ],
-    bath2    : [],
-    laundry  : [],
-    views    : [
-      {src:px('PH-31-2600-penn-8a-private-balcony'),             alt:'The private balcony'},
-      {src:px('PH-32-2600-penn-8a-potomac-river-view'),          alt:'Potomac River view from the balcony'},
-      {src:px('PH-33-2600-penn-8a-georgetown-sunset'),           alt:'Georgetown sunset from the balcony'},
-      {src:px('PH-34-2600-penn-8a-balcony-seating'),             alt:'Balcony seating'},
-      {src:px('PH-35-2600-penn-8a-view-at-night'),               alt:'The view after dark'}
-    ],
-    building : [
-      {src:px('PH-41-2600-penn-art-deco-facade'),                alt:'Art Deco facade on Pennsylvania Avenue'},
-      {src:px('PH-42-2600-penn-lobby'),                          alt:'Building lobby'},
-      {src:px('PH-43-2600-penn-elevator'),                       alt:'Elevator'},
-      {src:px('PH-44-2600-penn-garage-entry'),                   alt:'Attached garage entry'}
-    ],
-    neighborhood: [
-      {src:px('PH-51-2600-penn-from-above'),                     alt:'The building from above'},
-      {src:px('PH-52-2600-penn-west-end-from-above'),            alt:'West End from above'},
-      {src:px('PH-53-2600-penn-georgetown-waterfront'),          alt:'Georgetown Waterfront'},
-      {src:px('PH-54-2600-penn-potomac-and-rock-creek'),         alt:'The Potomac and Rock Creek Parkway'},
-      {src:px('PH-55-2600-penn-foggy-bottom-metro'),             alt:'Foggy Bottom–GWU Metro'},
-      {src:px('PH-56-2600-penn-kennedy-center'),                 alt:'The Kennedy Center'},
-      {src:px('PH-57-2600-penn-m-street-georgetown'),            alt:'M Street, Georgetown'}
-    ],
-    floorplan: [
-      {src:px('PH-60-2600-penn-8a-floor-plan-with-dimensions'),  alt:'Floor plan with dimensions'}
-    ]
+    /* No photos supplied yet. Empty sets hide their grid and downgrade
+       their tour card — nothing renders broken. Add entries here and
+       the section reappears with no other change. */
+    building     : [],
+    neighborhood : [],
+    floorplan    : []
   };
 
   /* ============================================================
-     3. ROOMS — one level, so LEVELS has a single entry and the
-        level switcher hides itself. Add a second key here (and the
-        matching LEVEL_NAME / LEVEL_SUB labels) and the switcher
-        reappears with no other change.
-        [P1] Room copy is DRAFT, written from the MLS remarks.
-        Rewrite once you have walked it.
+     3. ROOMS — one level, so the level switcher hides itself.
+        Only rooms we actually have photographs of appear here.
+        The unit is 2 bed / 2 bath per the MLS; one of each is
+        photographed, so the explorer shows one of each and the
+        specs grid still reports 2 and 2.
      ============================================================ */
   var ROOMS = {
     unit: [
-      {label:'01', title:'The entry',            img:'PH-10-2600-penn-8a-entry',           gallery:null,        desc:'The elevator opens onto the eighth floor and the door to #8A — a top-floor arrival with no one overhead and no corridor to share past your own.'},
-      {label:'02', title:'The living room',      img:'PH-11-2600-penn-8a-living-room',     gallery:'living',    desc:'Sun-drenched and west-facing, with a fireplace and a wall of glass that opens to the balcony. This is the room the listing is really about: the Potomac in the middle distance and Georgetown taking the sunset.'},
-      {label:'03', title:'The dining area',      img:'PH-14-2600-penn-8a-dining-area',     gallery:'dining',    desc:'A defined dining area sits between the living room and the kitchen — room for a proper table rather than a nook.'},
-      {label:'04', title:'The galley kitchen',   img:'PH-16-2600-penn-8a-kitchen',         gallery:'kitchen',   desc:'A galley kitchen runs efficiently alongside the dining area — everything within a step, and out of sight from the living room when you are entertaining.'},
-      {label:'05', title:'The primary bedroom',  img:'PH-20-2600-penn-8a-primary-bedroom', gallery:'primary',   desc:'The primary suite sits at its own end of the unit, with its own full bath — the quiet side of a top-floor plan.'},
-      {label:'06', title:'The primary bath',     img:'PH-23-2600-penn-8a-primary-bath',    gallery:'primarybath',desc:'A full en-suite bath serving the primary bedroom.'},
-      {label:'07', title:'The second bedroom',   img:'PH-25-2600-penn-8a-second-bedroom',  gallery:'bed2',      desc:'A second bedroom set apart from the primary — a genuine guest room, home office, or roommate-friendly split.'},
-      {label:'08', title:'The second bath',      img:'PH-27-2600-penn-8a-second-bath',     gallery:'bath2',     desc:'A second full bath serves the guest bedroom and the main living space.'},
-      {label:'09', title:'Laundry in unit',      img:'PH-28-2600-penn-8a-washer-dryer',    gallery:'laundry',   desc:'Full washer and dryer inside the unit — no basement machines, no quarters, no schedule.'}
+      {label:'01', title:'The living room',    img:IMG.livingPanoramic, gallery:'living',  desc:'The room the listing is really about \u2014 a panoramic wall of glass over the city, a fireplace with built-ins beside it, and the balcony straight ahead. Georgetown takes the sunset from here.'},
+      {label:'02', title:'The galley kitchen', img:IMG.kitchen,         gallery:'kitchen', desc:'A galley kitchen runs efficiently off the hallway \u2014 everything within a step, and screened from the living room when you are entertaining.'},
+      {label:'03', title:'The bedroom',        img:IMG.bedroomA,        gallery:'bedroom', desc:'A quiet corner set apart from the living space, with its own city view eight floors up.'},
+      {label:'04', title:'The bathroom',       img:IMG.bathA,           gallery:'bath',    desc:'A full bath serving the bedroom and the main living space.'}
     ]
   };
   var LEVELS     = ['unit'];
   var LEVEL_NAME = {unit:'The unit'};
   var LEVEL_SUB  = {unit:'One level'};
 
-  /* Plate grids — {gallery key, index into that gallery} */
+  /* Plate grids — {gallery key, index into that gallery}.
+     An empty gallery removes its grid entirely (see plates()). */
   var VIEWSET = [
-    {gal:'views', i:0, cap:'The private balcony', big:true},
-    {gal:'views', i:1, cap:'Potomac River view'},
-    {gal:'views', i:2, cap:'Georgetown sunset'},
-    {gal:'views', i:3, cap:'Balcony seating'},
-    {gal:'views', i:4, cap:'After dark'}
+    {gal:'views', i:0, cap:'Fireplace & built-ins', big:true},
+    {gal:'views', i:1, cap:'Built-ins, second angle'},
+    {gal:'views', i:2, cap:'The balcony'},
+    {gal:'views', i:3, cap:'Balcony, another angle'}
   ];
-  var BUILDINGSET = [
-    {gal:'building', i:0, cap:'Art Deco facade'},
-    {gal:'building', i:1, cap:'Lobby'},
-    {gal:'building', i:2, cap:'Elevator'},
-    {gal:'building', i:3, cap:'Garage entry'}
-  ];
-  var HOODSET = [
-    {gal:'neighborhood', i:0, cap:'The building from above', big:true},
-    {gal:'neighborhood', i:1, cap:'West End from above'},
-    {gal:'neighborhood', i:2, cap:'Georgetown Waterfront'},
-    {gal:'neighborhood', i:3, cap:'Potomac & Rock Creek'},
-    {gal:'neighborhood', i:4, cap:'Foggy Bottom–GWU Metro'},
-    {gal:'neighborhood', i:5, cap:'The Kennedy Center'},
-    {gal:'neighborhood', i:6, cap:'M Street, Georgetown'}
-  ];
+  var BUILDINGSET = [];   /* no building photos supplied yet */
+  var HOODSET     = [];   /* no neighbourhood photos supplied yet */
 
-  /* [VERIFY] Walk times are approximate and unverified — confirm each one,
-     or delete the right-hand value, before this page goes live. */
+  /* [VERIFY] Confirm each line with the property manager before launch. */
   var BUILDING_FACTS = [
-    ['Floors',            '8 · #8A is top floor'],
-    ['Built',             '2001 · Art Deco'],
+    ['Floors',            '8 \u00b7 #8A is top floor'],
+    ['Built',             '2001 \u00b7 Art Deco'],
     ['Elevator',          'Yes'],
     ['Entry',             'Intercom'],
     ['Garage',            '1 attached space with opener'],
     ['Laundry',           'In unit'],
     ['Condo / HOA fee',   'None for the tenant']
   ];
+  /* [VERIFY] Walk times are approximate and unverified \u2014 confirm each one,
+     or delete the right-hand value, before this page goes live. */
   var LOC_FACTS = [
-    ['Foggy Bottom–GWU Metro', 'Blue · Orange · Silver'],
-    ['Georgetown — M Street',  'Walkable'],
+    ['Foggy Bottom\u2013GWU Metro', 'Blue \u00b7 Orange \u00b7 Silver'],
+    ['Georgetown \u2014 M Street',  'Walkable'],
     ['Georgetown Waterfront',       'Walkable'],
-    ['Trader Joe’s',           'Nearby'],
-    ['Whole Foods — Foggy Bottom','Nearby'],
+    ['Trader Joe\u2019s',           'Nearby'],
+    ['Whole Foods \u2014 Foggy Bottom','Nearby'],
     ['George Washington University', 'Adjacent'],
     ['GW Hospital',                 'Nearby'],
     ['The Kennedy Center',          'Nearby'],
@@ -677,7 +656,7 @@
   /* ---- hero ---- */
   (function renderHero(){
     var h = document.querySelector('#pt-hero .hero-img');
-    if (h){ h.src = HERO_IMG; h.alt = FACTS.addressShort + ' — the view from the balcony'; }
+    if (h){ h.src = HERO_IMG; h.alt = FACTS.addressShort + ' \u2014 the panoramic view from the living room'; }
 
     set('pt-avail-pill', esc(LEASE.availableShort));
     set('pt-hero-rent', money(LEASE.rent) + '<span style="font-family:\'Raleway\',sans-serif;font-size:.42em;letter-spacing:.04em;color:#cdb280"> / month</span>');
@@ -773,9 +752,20 @@
   }
 
   /* ---- plate grids ---- */
-  function plates(elId, setDef, defaultRows){
+  function plates(elId, setDef, alsoHide){
     var el = document.getElementById(elId); if (!el) return;
-    el.innerHTML = setDef.map(function(g){
+    /* No photos for this set yet: remove the grid and anything that only
+       exists to introduce it, rather than rendering empty or dark tiles. */
+    var live = setDef.filter(function(g){ return (GAL[g.gal] || [])[g.i]; });
+    if (!live.length){
+      el.parentNode.removeChild(el);
+      (alsoHide || []).forEach(function(id){
+        var n = document.getElementById(id);
+        if (n) n.parentNode.removeChild(n);
+      });
+      return;
+    }
+    el.innerHTML = live.map(function(g){
       return '<button class="pt-plate" data-gal="' + g.gal + '" data-idx="' + g.i + '" style="position:relative;overflow:hidden;border-radius:14px;border:none;padding:0;cursor:pointer;' + (g.big ? 'grid-column:span 2;grid-row:span 2;' : '') + '">'
         + '<img src="' + ((GAL[g.gal] || [])[g.i] || {}).src + '" alt="' + esc(g.cap) + '" loading="lazy" decoding="async" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">'
         + '<span style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,13,13,.72),rgba(15,13,13,0) 52%)"></span>'
@@ -1023,8 +1013,13 @@
 
   renderRooms();
   plates('pt-viewset',     VIEWSET);
-  plates('pt-buildingset', BUILDINGSET);
-  plates('pt-hood',        HOODSET);
+  plates('pt-buildingset', BUILDINGSET);          /* empty -> column removed below */
+  plates('pt-hood',        HOODSET, ['pt-hood-intro']);
+  /* with no building photos the building block drops to a single column */
+  if (!document.getElementById('pt-buildingset')){
+    var bg = document.getElementById('pt-building-grid');
+    if (bg){ bg.style.gridTemplateColumns = '1fr'; bg.style.maxWidth = '820px'; }
+  }
   factList('pt-building-list', BUILDING_FACTS);
   factList('pt-loc-list',      LOC_FACTS);
 })();

@@ -33,48 +33,39 @@ render from them. Change the rent in one place and it changes in six. (The sale 
 
 ## Before this goes live
 
-### Photos — you're sending these
-Every image slug starts with `PH-` and renders as a dark tile until swapped. Replace one at a
-time in `GAL` / `ROOMS` / `HERO_LOOP` near the top of the script. When the last `PH-` is gone,
-set `USE_PLACEHOLDERS = false` so a typo shows as a broken image instead of hiding silently.
+### Photos — live
 
-Also confirm the upload folder — the file assumes `.../uploads/2026/08/`.
+All 14 supplied files are wired in and `USE_PLACEHOLDERS` is now `false`, so a bad slug shows
+as a broken image instead of hiding as a dark tile. Folder confirmed: `.../uploads/2026/08/`.
 
-Shot list the page is built around:
+**Do not tidy the slug strings.** They carry WordPress's artefacts and must match the upload
+byte for byte: trailing hyphens (`One-bathroom-`), duplicate-name counters (`-1`, `-1-1`),
+and the edited-image suffix (`-e1786804075244`).
 
-- **Hero + rotation (4):** balcony/river view, living room at sunset, building exterior, Georgetown from the balcony
-- **Rooms (9 leads):** entry, living room, dining area, galley kitchen, primary bedroom, primary bath, second bedroom, second bath, washer/dryer
-- **Room extras (9):** living ×3, dining ×1, kitchen ×2, primary ×2, primary bath ×1, bedroom 2 ×1
-- **Views (5):** balcony, Potomac view, Georgetown sunset, balcony seating, view at night
-- **Building (4):** Art Deco facade, lobby, elevator, garage entry
-- **Neighborhood (7):** building from above, West End from above, Georgetown Waterfront, Potomac & Rock Creek, Foggy Bottom–GWU Metro, Kennedy Center, M Street
-- **Floor plan (1)**
+| Where | Photos |
+|---|---|
+| Hero (lead) | `panoramic-view-from-the-living-room` |
+| Hero rotation | living room w/ fireplace, balcony w/ built-ins, bedroom |
+| Room 01 — living room | panoramic (lead) + fireplace/balcony + hallway view |
+| Room 02 — galley kitchen | `kitchen` (lead) + another angle + galley zoomed out |
+| Room 03 — bedroom | `One-Bed-with-the-city-view-` (lead) + `-1-1` |
+| Room 04 — bathroom | `One-bathroom-` (lead) + `-1-1` |
+| Views & balcony | the 4 balcony files |
 
-The hub block needs the hero photo URL in two places (`data-hero` and the thumb `src`).
-Those two are **not** placeholder-protected — they are plain `<img src>` in the hub markup,
-so don't paste the updated hub until you have at least the hero photo, or it shows a broken
-image in the index and the hero.
+The bedroom and the bathroom are each a **two-photo sequence**, the same as the kitchen and
+balcony pairs. If the `-1-1` files turn out to be duplicate uploads rather than second angles,
+delete that entry from `GAL.bedroom` / `GAL.bath` and the lightbox drops back to one photo.
 
-### Export sizes
+### Still no photos for
 
-One file serves both the grid tile and the lightbox, and the room lead images double as the
-filmstrip thumbnails, so size for the **largest** place each image appears:
+Building (facade, lobby, elevator, garage), neighbourhood aerials, floor plan. Those sets are
+empty arrays, and an empty set now **removes its grid** — the building block drops to one
+column, the aerials grid and its intro paragraph disappear, and the floor-plan tour card reads
+"Coming soon". Add entries to `GAL.building` / `GAL.neighborhood` / `GAL.floorplan` (and the
+matching `BUILDINGSET` / `HOODSET` tiles) and each section reappears with no other change.
 
-| Set | Export width | Target weight | Why |
-|---|---|---|---|
-| Hero + rotation (4) | 2400 px | ≤350 KB | Full-bleed, stretches to the display width. The first one is the LCP image — it is the only one worth obsessing over |
-| Room leads (9) | 1600 px | ≤180 KB | Fills the 16:9 featured panel; also reused at 172×96 in the filmstrip |
-| Room extras (9) | 1600 px | ≤180 KB | Lightbox only |
-| Views / building / neighborhood (16) | 1600 px | ≤180 KB | Grid tiles are 300–600 px, but the same file opens in the lightbox at 1100 px |
-| Floor plan (1) | 2000 px | ≤400 KB | Has to stay legible when zoomed — use a higher quality than the photos, line art and small type suffer from aggressive compression |
-
-WebP, quality ~72 (~80 for the floor plan), sRGB, EXIF stripped. That lands the whole set
-around 6–7 MB, of which only the hero and a handful of tiles load up front — the filmstrip
-and every grid tile are lazy-loaded.
-
-**Filenames matter**: lowercase, hyphens, no spaces or apostrophes. The script builds every
-URL as `folder + slug + '.webp'`, so if WordPress renames the upload the slug breaks. Upload
-first, then copy the real slug off the media library URL.
+The unit is 2 bed / 2 bath per the MLS; one of each is photographed, so the room explorer shows
+one bedroom and one bathroom while the specs grid still reports 2 and 2.
 
 ### Fill in
 - `TOUR_URL` — the **public** 3D tour link. Empty = the hero button and tour card hide/downgrade themselves, no dead link.
