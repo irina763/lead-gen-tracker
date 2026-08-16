@@ -157,8 +157,8 @@
       </div>
       <div style="text-align:center;padding:6px">
         <svg viewBox="0 0 48 48" fill="none" stroke="#b89b6a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;margin-bottom:12px" aria-hidden="true"><path d="M8 32v8h6v-8"/><path d="M34 32v8h6v-8"/><path d="M6 32h36l-3-11a4 4 0 00-4-3H13a4 4 0 00-4 3z"/><circle cx="14" cy="27" r="1.5"/><circle cx="34" cy="27" r="1.5"/></svg>
-        <p class="pt-serif" style="font-size:17px;color:#f4efe6;margin:0 0 4px">Garage parking</p>
-        <p style="font:500 11px/1.4 'Raleway',sans-serif;color:#a39d92;margin:0">1 attached space</p>
+        <p class="pt-serif" style="font-size:17px;color:#f4efe6;margin:0 0 4px">Garage &amp; storage</p>
+        <p style="font:500 11px/1.4 'Raleway',sans-serif;color:#a39d92;margin:0">Both included in rent</p>
       </div>
       <div style="text-align:center;padding:6px">
         <svg viewBox="0 0 48 48" fill="none" stroke="#b89b6a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px;margin-bottom:12px" aria-hidden="true"><rect x="13" y="7" width="22" height="26" rx="3"/><circle cx="18" cy="38" r="3"/><circle cx="30" cy="38" r="3"/><path d="M13 33h22M13 20h22"/></svg>
@@ -300,7 +300,7 @@
     </div>
 
     <div style="text-align:center;margin:clamp(30px,4vw,44px) 0 0">
-      <a href="sms:+12024958373?&body=Hi!%20I%27d%20like%20the%20rental%20application%20for%202600%20Pennsylvania%20Ave%20NW%20%238A.%0A%0AFull%20Name%3A%0ADesired%20move-in%20date%3A%0ANumber%20of%20occupants%3A%0APets%3A" class="pt-link-hover" style="display:inline-flex;align-items:center;gap:8px;font:600 13px/1 'Raleway',sans-serif;letter-spacing:.06em;color:#221f1f;background:#b89b6a;padding:15px 26px;border-radius:999px;text-decoration:none">Request the application &rarr;</a>
+      <a id="pt-apply" href="sms:+12024958373?&body=Hi!%20I%27d%20like%20the%20rental%20application%20for%202600%20Pennsylvania%20Ave%20NW%20%238A.%0A%0AFull%20Name%3A%0ADesired%20move-in%20date%3A%0ANumber%20of%20occupants%3A%0APets%3A" class="pt-link-hover" style="display:inline-flex;align-items:center;gap:8px;font:600 13px/1 'Raleway',sans-serif;letter-spacing:.06em;color:#221f1f;background:#b89b6a;padding:15px 26px;border-radius:999px;text-decoration:none">Request the application &rarr;</a>
     </div>
   </div>
 </section>
@@ -473,7 +473,8 @@
     yearBuilt  : 2001,
     style      : 'Art Deco mid-rise',
     unitType   : 'Penthouse condo',
-    parking    : '1 attached garage space',
+    parking    : '1 garage space + storage unit',
+    parkingNote: 'Both included in the rent',
     laundry    : 'Washer & dryer in unit',
     heating    : 'Forced air &middot; natural gas',
     cooling    : 'Central A/C',
@@ -486,7 +487,8 @@
     rent        : 4800,
     deposit     : 4800,                    /* one month */
     moveInFee   : 300,
-    appFee      : 50,                      /* [VERIFY] per adult applicant? */
+    appFee      : 50,                      /* per APPLICATION, not per adult */
+    appVia      : 'RentSpree',
     available   : 'October 1, 2026',
     availableShort:'Available Oct 1',
     termMin     : 12,
@@ -494,7 +496,7 @@
     pets        : 'Up to 2 domestic pets, case by case, with landlord approval',
     incomeMult  : 3,
     references  : 'References from your last 2–3 landlords',
-    screening   : 'Credit and background check',
+    screening   : 'Credit and background check via RentSpree',
     tenantPays  : ['Electric', 'Gas', 'Internet'],
     ownerPays   : ['Water', 'Sewer', 'Trash', 'Property taxes']
   };
@@ -510,6 +512,10 @@
      the location facts run full width, so the page is safe to publish before
      the map exists. Paste the id and the map appears with no other change. */
   var PROXI_MAP_ID = '';
+
+  /* Direct RentSpree application link. When set, the "Request the
+     application" button points straight at it; empty keeps the SMS. */
+  var APPLY_URL = '';
 
   /* ============================================================
      2. PHOTOS — all live. Folder confirmed 2026/08/.
@@ -623,6 +629,7 @@
     ['Elevator',          'Yes'],
     ['Entry',             'Intercom'],
     ['Garage',            '1 attached space with opener'],
+    ['Storage',           'Separate storage unit'],
     ['Laundry',           'In unit'],
     ['Condo / HOA fee',   'None for the tenant']
   ];
@@ -666,7 +673,7 @@
       [FACTS.baths.split(' ')[0],'Baths'],
       [num(FACTS.sqft),          'Sq ft'],
       [FACTS.floorNo + 'th',     'Floor · penthouse', true],
-      ['1',                      'Garage space']
+      ['1',                      'Garage + storage']
     ];
     set('pt-hero-stats', stats.map(function(s){
       return '<div><span class="pt-serif" style="font-size:28px;color:' + (s[2] ? '#cdb280' : '#f4efe6') + '">' + esc(s[0]) + '</span>'
@@ -806,7 +813,7 @@
       ['First month’s rent', LEASE.rent],
       ['Security deposit',        LEASE.deposit],
       ['Move-in fee',             LEASE.moveInFee],
-      ['Application fee',         LEASE.appFee]
+      ['Application fee (per application)', LEASE.appFee]
     ];
     var total = lines.reduce(function(s, l){ return s + l[1]; }, 0);
     set('pt-movein-lines', lines.map(function(l){
@@ -833,7 +840,7 @@
       ['Security deposit',money(LEASE.deposit)],
       ['Move-in fee',     money(LEASE.moveInFee)],
       ['Application fee', money(LEASE.appFee)],
-      ['Parking',         FACTS.parking],
+      ['Parking &amp; storage', FACTS.parking + ' \u2014 ' + FACTS.parkingNote.toLowerCase()],
       ['Pets',            LEASE.pets],
       ['Furnished',       'No']
     ];
@@ -841,7 +848,7 @@
       ['Minimum income',  money(LEASE.rent * 12 * LEASE.incomeMult) + ' / year (' + LEASE.incomeMult + '× annual rent)'],
       ['Screening',       LEASE.screening],
       ['References',      LEASE.references],
-      ['Application fee', money(LEASE.appFee)],
+      ['Application fee', money(LEASE.appFee) + ' per application, via ' + LEASE.appVia],
       ['Decision',        'Landlord approval required']
     ];
     function bullets(rows){
@@ -852,6 +859,16 @@
       }).join('');
     }
     set('pt-terms',   bullets(terms));
+    /* direct RentSpree link when we have one, SMS otherwise */
+    if (APPLY_URL){
+      var ap = document.getElementById('pt-apply');
+      if (ap){
+        ap.href = APPLY_URL;
+        ap.target = '_blank';
+        ap.rel = 'noopener';
+        ap.innerHTML = 'Apply on ' + esc(LEASE.appVia) + ' &rarr;';
+      }
+    }
     set('pt-qualify', bullets(qualify));
   })();
 
@@ -867,7 +884,7 @@
       ['Square footage',  num(FACTS.sqft) + ' sf (' + FACTS.sqftNote + ')'],
       ['Bedrooms',        FACTS.beds],
       ['Bathrooms',       FACTS.baths],
-      ['Parking',         FACTS.parking],
+      ['Parking &amp; storage', FACTS.parking],
       ['Laundry',         FACTS.laundry],
       ['Fireplace',       FACTS.fireplace],
       ['Heating',         FACTS.heating],

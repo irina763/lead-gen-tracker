@@ -75,13 +75,24 @@ one bedroom and one bathroom while the specs grid still reports 2 and 2.
   Paste the id and the map appears with no other change.
 - The listing page URL, if it isn't `/2600-pennsylvania-ave-nw-8a-washington-dc/` (used in the hub block and the hero fallback).
 
-### Verify with the landlord / property manager
-- **Is the garage space included in the rent, or extra?** The page currently implies included.
-- **Application fee $50 — per adult, or per application?**
-- Renter's insurance required?
-- Is the $300 move-in fee refundable, and is it the building's or the landlord's?
-- Square footage is MLS "estimated" — the page says so; confirm you're comfortable publishing it.
-- Fireplace: working, gas or wood, or decorative?
+### Confirmed with the landlord
+- Garage space **and a separate storage unit** are both included in the rent. Storage is not in
+  the MLS record — it now appears in the highlights strip, the specs grid, the lease terms and
+  the building facts.
+- Application fee is **$50 per application** (not per adult), taken through **RentSpree**. The
+  move-in total is unchanged at $9,950.
+
+### Still to confirm with the landlord / property manager
+- **Renter's insurance** — required, and at what coverage?
+- **The $300 move-in fee** — refundable? The building's, or the landlord's?
+- **The fireplace** — working or decorative, and gas or wood? The living-room photos feature it,
+  so a renter will ask.
+- **Square footage** — 1,100 is the MLS "estimated" figure. The page labels it as estimated;
+  confirm you're comfortable publishing it.
+
+### Also needed
+- **The RentSpree application link.** Paste it into `APPLY_URL` and the "Request the
+  application" button becomes a direct "Apply on RentSpree" link. Empty keeps the SMS flow.
 
 ### Verify yourself
 - Every walk time / distance in `LOC_FACTS`. They currently say "Walkable" / "Nearby" rather
