@@ -174,11 +174,18 @@
   <div style="max-width:1340px;margin:0 auto;padding:0 clamp(22px,5vw,52px)">
     <div style="text-align:center;max-width:640px;margin:0 auto 44px">
       <p style="font:600 11px/1 'Raleway',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#b89b6a;margin:0">A closer look</p>
-      <h2 id="pt-tour-head" class="pt-serif" style="font-size:clamp(28px,3.4vw,44px);line-height:1.08;color:#f4efe6;margin:14px 0 0;text-wrap:balance">Walk it in 3D, then see the layout.</h2>
+      <h2 id="pt-tour-head" class="pt-serif" style="font-size:clamp(28px,3.4vw,44px);line-height:1.08;color:#f4efe6;margin:14px 0 0;text-wrap:balance">See exactly where it sits.</h2>
     </div>
-    <!-- Cards render from TOUR_CARDS in the script so a missing URL
-         downgrades the card to "coming soon" instead of a dead link. -->
-    <div class="pt-tour-grid" id="pt-tour-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1100px;margin:0 auto"></div>
+    <!-- The cards, the grid width above, and the heading above that are all
+         rendered by renderTourCards() in the script, from whichever of
+         TOUR_URL / VIDEO_ID / AREA_VIDEO_ID / PROXI_MAP_ID / GAL.floorplan
+         are set. A card with nothing behind it is not rendered at all.
+
+         The static values here are the pre-JS defaults, and they are written
+         to match the CURRENT configuration — map only, so one card and
+         "See exactly where it sits." Add a tour or a video and the script
+         overrides both; update these defaults to match if you do. -->
+    <div class="pt-tour-grid" id="pt-tour-grid" style="display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:16px;max-width:360px;margin:0 auto"></div>
   </div>
 </section>
 
@@ -725,9 +732,9 @@
     var hasWalkthrough = cards.some(function(c){ return c.href || c.video; });
     var head = document.getElementById('pt-tour-head');
     if (head){
-      head.textContent = hasWalkthrough
-        ? 'Walk it in 3D, then see the layout.'
-        : 'See exactly where it sits.';
+      /* The markup already says "See exactly where it sits." — only
+         override it when there is something to actually walk through. */
+      if (hasWalkthrough) head.textContent = 'Walk it in 3D, then see the layout.';
     }
 
     /* Don't stretch one card across 1100px. */
