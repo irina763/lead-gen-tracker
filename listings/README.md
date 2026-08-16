@@ -59,10 +59,11 @@ delete that entry from `GAL.bedroom` / `GAL.bath` and the lightbox drops back to
 ### Still no photos for
 
 Building (facade, lobby, elevator, garage), neighbourhood aerials, floor plan. Those sets are
-empty arrays, and an empty set now **removes its grid** — the building block drops to one
-column, the aerials grid and its intro paragraph disappear, and the floor-plan tour card reads
-"Coming soon". Add entries to `GAL.building` / `GAL.neighborhood` / `GAL.floorplan` (and the
-matching `BUILDINGSET` / `HOODSET` tiles) and each section reappears with no other change.
+empty arrays, and an empty set **removes its grid** — the building block drops to one column,
+and the aerials grid and its intro paragraph disappear. The floor-plan card is not rendered at
+all (nothing is shown as "Coming soon" any more). Add entries to `GAL.building` /
+`GAL.neighborhood` / `GAL.floorplan` (and the matching `BUILDINGSET` / `HOODSET` tiles) and
+each section reappears with no other change.
 
 The unit is 2 bed / 2 bath per the MLS; one of each is photographed, so the room explorer shows
 one bedroom and one bathroom while the specs grid still reports 2 and 2.
