@@ -76,23 +76,22 @@ one bedroom and one bathroom while the specs grid still reports 2 and 2.
 - The listing page URL, if it isn't `/2600-pennsylvania-ave-nw-8a-washington-dc/` (used in the hub block and the hero fallback).
 
 ### Confirmed with the landlord
-- Garage space **and a separate storage unit** are both included in the rent. Storage is not in
-  the MLS record — it now appears in the highlights strip, the specs grid, the lease terms and
-  the building facts.
-- Application fee is **$50 per application** (not per adult), taken through **RentSpree**. The
-  move-in total is unchanged at $9,950.
 
-### Still to confirm with the landlord / property manager
-- **Renter's insurance** — required, and at what coverage?
-- **The $300 move-in fee** — refundable? The building's, or the landlord's?
-- **The fireplace** — working or decorative, and gas or wood? The living-room photos feature it,
-  so a renter will ask.
-- **Square footage** — 1,100 is the MLS "estimated" figure. The page labels it as estimated;
-  confirm you're comfortable publishing it.
+- Garage space **and a separate storage unit**, both included in the rent. Storage is not in the
+  MLS record.
+- Application fee **$50 per application** (not per adult), through **RentSpree**.
+  `APPLY_URL = https://apply.link/1TWaQ8w` — the CTA is now a direct "Apply on RentSpree" link.
+- **Renter's insurance required** for the term of the lease.
+- **Move-in fee is non-refundable** (the security deposit is refundable per DC law and the lease).
+- **Fireplace is gas and working.**
+- **Square footage published as a flat 1,100 sf**, no "estimated" qualifier — Bright now
+  distinguishes assessor figures from agent-supplied estimates, so the qualifier read as doubt
+  rather than precision.
 
-### Also needed
-- **The RentSpree application link.** Paste it into `APPLY_URL` and the "Request the
-  application" button becomes a direct "Apply on RentSpree" link. Empty keeps the SMS flow.
+One wording note: the page says renter's insurance is **"Required for the term of the lease"**
+rather than "legally required." DC has no statute obliging a tenant to carry it — it is a lease
+requirement, universal in practice but contractual. "Required" is true and enforceable; "legally
+required" is a legal claim on a public page, and not one worth making.
 
 ### Verify yourself
 - Every walk time / distance in `LOC_FACTS`. They currently say "Walkable" / "Nearby" rather

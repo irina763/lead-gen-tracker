@@ -277,7 +277,7 @@
         <p style="font:600 11px/1 'Raleway',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#b89b6a;margin:0 0 22px">Due before move-in</p>
         <ul id="pt-movein-lines" style="list-style:none;margin:0;padding:0"></ul>
         <div id="pt-movein-total" style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:20px;padding-top:20px;border-top:1px solid rgba(184,155,106,.32)"></div>
-        <p style="font-size:12px;color:#6f6a62;line-height:1.55;margin:18px 0 0">Estimate only, and the deposit is refundable per DC law and the terms of the lease. Prorated first month if you move mid-month. Renter's insurance may be required &mdash; confirm with the property manager.</p>
+        <p style="font-size:12px;color:#6f6a62;line-height:1.55;margin:18px 0 0">Estimate only. The security deposit is refundable per DC law and the terms of the lease; the move-in fee is not. Prorated first month if you move mid-month. Renter's insurance is required for the term of the lease.</p>
       </div>
       <div style="border:1px solid rgba(244,239,230,.10);border-radius:18px;background:#262220;padding:clamp(26px,3.5vw,40px);display:flex;flex-direction:column">
         <p style="font:600 11px/1 'Raleway',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#b89b6a;margin:0 0 22px">Utilities</p>
@@ -468,7 +468,6 @@
     beds       : 2,
     baths      : '2 full',
     sqft       : 1100,          /* MLS: estimated */
-    sqftNote   : 'estimated',
     floorNo    : 8,
     yearBuilt  : 2001,
     style      : 'Art Deco mid-rise',
@@ -479,7 +478,7 @@
     heating    : 'Forced air &middot; natural gas',
     cooling    : 'Central A/C',
     hotWater   : 'Natural gas',
-    fireplace  : 'Yes',
+    fireplace  : 'Gas, working',
     mls        : 'DCDC2276660'
   };
 
@@ -496,6 +495,8 @@
     pets        : 'Up to 2 domestic pets, case by case, with landlord approval',
     incomeMult  : 3,
     references  : 'References from your last 2–3 landlords',
+    insurance   : 'Required for the term of the lease',
+    moveInNote  : 'non-refundable',
     screening   : 'Credit and background check via RentSpree',
     tenantPays  : ['Electric', 'Gas', 'Internet'],
     ownerPays   : ['Water', 'Sewer', 'Trash', 'Property taxes']
@@ -515,7 +516,7 @@
 
   /* Direct RentSpree application link. When set, the "Request the
      application" button points straight at it; empty keeps the SMS. */
-  var APPLY_URL = '';
+  var APPLY_URL = 'https://apply.link/1TWaQ8w';
 
   /* ============================================================
      2. PHOTOS — all live. Folder confirmed 2026/08/.
@@ -838,10 +839,11 @@
       ['Available',       LEASE.available],
       ['Lease term',      LEASE.termMin + '–' + LEASE.termMax + ' months'],
       ['Security deposit',money(LEASE.deposit)],
-      ['Move-in fee',     money(LEASE.moveInFee)],
+      ['Move-in fee',     money(LEASE.moveInFee) + ' (' + LEASE.moveInNote + ')'],
       ['Application fee', money(LEASE.appFee)],
       ['Parking &amp; storage', FACTS.parking + ' \u2014 ' + FACTS.parkingNote.toLowerCase()],
       ['Pets',            LEASE.pets],
+      ['Renter’s insurance', LEASE.insurance],
       ['Furnished',       'No']
     ];
     var qualify = [
@@ -881,7 +883,7 @@
       ['Type',            FACTS.unitType],
       ['Floor',           FACTS.floorNo + ' of ' + FACTS.floorNo],
       ['Year built',      FACTS.yearBuilt],
-      ['Square footage',  num(FACTS.sqft) + ' sf (' + FACTS.sqftNote + ')'],
+      ['Square footage',  num(FACTS.sqft) + ' sf'],
       ['Bedrooms',        FACTS.beds],
       ['Bathrooms',       FACTS.baths],
       ['Parking &amp; storage', FACTS.parking],
