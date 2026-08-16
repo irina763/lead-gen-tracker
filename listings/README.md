@@ -67,12 +67,16 @@ matching `BUILDINGSET` / `HOODSET` tiles) and each section reappears with no oth
 The unit is 2 bed / 2 bath per the MLS; one of each is photographed, so the room explorer shows
 one bedroom and one bathroom while the specs grid still reports 2 and 2.
 
-### Fill in
-- `TOUR_URL` — the **public** 3D tour link. Empty = the hero button and tour card hide/downgrade themselves, no dead link.
-- `VIDEO_ID`, `AREA_VIDEO_ID` — YouTube ids. Same downgrade behaviour.
-- `PROXI_MAP_ID` — empty for now. Empty means the map column is **removed** and the
-  location facts run full width, so the page is safe to publish before the map exists.
-  Paste the id and the map appears with no other change.
+### Fill in — only if these ever exist
+There is no 3D tour and no video for this listing; the Proxi map takes that slot. The tour
+grid shows only cards with something behind them, so today it is a single "Explore the map"
+card and the heading reads "See exactly where it sits."
+
+- `TOUR_URL` — a public 3D tour link. Empty = no hero tour button, no tour card.
+- `VIDEO_ID`, `AREA_VIDEO_ID` — YouTube ids. Same behaviour.
+- `PROXI_MAP_ID` — **set** to `6a81c4de6096b9ae6b09d844`. The map renders in the location
+  section, and an "Explore the map" card appears in the tour grid. (Empty would remove the
+  map column and run the location facts full width.)
 - The listing page URL, if it isn't `/2600-pennsylvania-ave-nw-8a-washington-dc/` (used in the hub block and the hero fallback).
 
 ### Confirmed with the landlord
