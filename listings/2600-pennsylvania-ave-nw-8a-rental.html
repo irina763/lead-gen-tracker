@@ -181,11 +181,14 @@
          TOUR_URL / VIDEO_ID / AREA_VIDEO_ID / PROXI_MAP_ID / GAL.floorplan
          are set. A card with nothing behind it is not rendered at all.
 
-         The static values here are the pre-JS defaults, and they are written
-         to match the CURRENT configuration — map only, so one card and
-         "See exactly where it sits." Add a tour or a video and the script
-         overrides both; update these defaults to match if you do. -->
-    <div class="pt-tour-grid" id="pt-tour-grid" style="display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:16px;max-width:360px;margin:0 auto"></div>
+         With a map and nothing else — the current state — the map itself is
+         rendered here, full width, and left out of the location section so it
+         appears once. Add a tour, a video or a floor plan and this reverts to
+         a card grid and the map returns to the location section.
+
+         The static values here are the pre-JS defaults, written to match the
+         current configuration. -->
+    <div class="pt-tour-grid" id="pt-tour-grid" style="display:grid;grid-template-columns:1fr;gap:16px;max-width:1100px;margin:0 auto"></div>
   </div>
 </section>
 
@@ -661,6 +664,7 @@
   var root  = document.getElementById('pth');
   if (!root) return;
   var state = {level: LEVELS[0], roomIdx: 1, lbList: [], lbIdx: 0, lastFocus: null};
+  var mapShownUpTop = false;   /* set by renderTourCards, read by renderMap */
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -712,19 +716,38 @@
       {icon:'cube',  title:'3D walkthrough',     on:'Tour the inside',       href : TOUR_URL},
       {icon:'video', title:'Video tour',         on:'Watch the video',       video: VIDEO_ID},
       {icon:'globe', title:'The area',           on:'Tour the neighborhood', video: AREA_VIDEO_ID},
-      {icon:'pin',   title:'Explore the map',    on:'What is nearby', jump : (PROXI_MAP_ID && PROXI_MAP_ID.indexOf('REPLACE') !== 0) ? '#pt-location' : ''},
       {icon:'plan',  title:'Floor plan',         on:'See the layout',        gallery:'floorplan'}
     ].filter(function(c){
-      return !!(c.href || c.video || c.jump || (c.gallery && (GAL[c.gallery] || []).length));
+      return !!(c.href || c.video || (c.gallery && (GAL[c.gallery] || []).length));
     });
+
+    var hasMap = !!(PROXI_MAP_ID && PROXI_MAP_ID.indexOf('REPLACE') !== 0);
 
     var sec  = document.getElementById('pt-tour');
     var grid = document.getElementById('pt-tour-grid');
-    if (!cards.length){
+
+    if (!cards.length && !hasMap){
       /* nothing to show at all: drop the section and its nav link */
       if (sec) sec.parentNode.removeChild(sec);
       var jump = document.querySelector('.pt-jump[href="#pt-tour"]');
       if (jump) jump.parentNode.removeChild(jump);
+      return;
+    }
+
+    /* No tour, no video, no floor plan, but there is a map: show the MAP
+       itself here rather than a card whose only job is to scroll somewhere
+       else. renderMap() then leaves it out of the location section, so the
+       map appears exactly once. */
+    if (!cards.length && hasMap){
+      mapShownUpTop = true;
+      grid.style.gridTemplateColumns = '1fr';
+      grid.style.maxWidth = '1100px';
+      grid.innerHTML =
+          '<div style="border-radius:16px;overflow:hidden;border:1px solid rgba(244,239,230,.12);background:#2a2624">'
+        + '<proxi-map data-id="' + esc(PROXI_MAP_ID) + '" style="display:block;width:100%;height:min(62vh,560px)"></proxi-map></div>'
+        + '<p style="font:500 11px/1 \'Raleway\',sans-serif;letter-spacing:.04em;color:#6f6a62;text-align:center;margin:12px 0 0">Map powered by Proxi</p>';
+      var nav = document.querySelector('.pt-jump[href="#pt-tour"]');
+      if (nav) nav.textContent = 'Map';
       return;
     }
 
@@ -824,7 +847,7 @@
     var col  = document.getElementById('pt-map-col');
     var grid = document.getElementById('pt-loc-grid');
     if (!col) return;
-    if (!PROXI_MAP_ID || PROXI_MAP_ID.indexOf('REPLACE') === 0){
+    if (mapShownUpTop || !PROXI_MAP_ID || PROXI_MAP_ID.indexOf('REPLACE') === 0){
       col.parentNode.removeChild(col);
       /* single column: cap the measure so the prose doesn't run 1340px wide */
       if (grid){ grid.style.gridTemplateColumns = '1fr'; grid.style.maxWidth = '820px'; }

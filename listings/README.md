@@ -68,9 +68,13 @@ The unit is 2 bed / 2 bath per the MLS; one of each is photographed, so the room
 one bedroom and one bathroom while the specs grid still reports 2 and 2.
 
 ### Fill in — only if these ever exist
-There is no 3D tour and no video for this listing; the Proxi map takes that slot. The tour
-grid shows only cards with something behind them, so today it is a single "Explore the map"
-card and the heading reads "See exactly where it sits."
+There is no 3D tour and no video for this listing, so the "A closer look" section renders the
+**map itself**, full width, under "See exactly where it sits." — and the map is then left out
+of the location section, so it appears exactly once on the page. The nav link reads "Map".
+
+Add a tour, a video or a floor plan and that section reverts to a card grid, with the map
+moving back to its column in the location section. Cards with nothing behind them are never
+rendered; if nothing at all is live the section and its nav link are removed.
 
 - `TOUR_URL` — a public 3D tour link. Empty = no hero tour button, no tour card.
 - `VIDEO_ID`, `AREA_VIDEO_ID` — YouTube ids. Same behaviour.
