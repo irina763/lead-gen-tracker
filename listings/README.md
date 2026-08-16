@@ -78,9 +78,8 @@ rendered; if nothing at all is live the section and its nav link are removed.
 
 - `TOUR_URL` — a public 3D tour link. Empty = no hero tour button, no tour card.
 - `VIDEO_ID`, `AREA_VIDEO_ID` — YouTube ids. Same behaviour.
-- `PROXI_MAP_ID` — **set** to `6a81c4de6096b9ae6b09d844`. The map renders in the location
-  section, and an "Explore the map" card appears in the tour grid. (Empty would remove the
-  map column and run the location facts full width.)
+- `PROXI_MAP_ID` — **set** to `6a81c4de6096b9ae6b09d844`. See the paragraphs above for where
+  the map renders. (Empty would remove it entirely and run the location facts full width.)
 - The listing page URL, if it isn't `/2600-pennsylvania-ave-nw-8a-washington-dc/` (used in the hub block and the hero fallback).
 
 ### Confirmed with the landlord
